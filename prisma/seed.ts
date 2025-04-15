@@ -58,7 +58,7 @@ async function up() {
   const pizza1 = await prisma.product.create({
     data: {
       name: 'Пепперони фреш',
-      imageUrl: 'public/pizzas/pepperoni_fresh.webp',
+      imageUrl: '/pizzas/pepperoni_fresh.webp',
       categoryId: 1,
       ingredients: {
         connect: ingredients.slice(0, 5),
@@ -69,7 +69,7 @@ async function up() {
   const pizza2 = await prisma.product.create({
     data: {
       name: 'Cheese',
-      imageUrl: 'public/pizzas/cheese.webp',
+      imageUrl: '/pizzas/cheese.webp',
       categoryId: 1,
       ingredients: {
         connect: ingredients.slice(5, 10),
@@ -80,7 +80,7 @@ async function up() {
   const pizza3 = await prisma.product.create({
     data: {
       name: 'Chorizo fresh',
-      imageUrl: 'public/pizzas/chorizo fresh.webp',
+      imageUrl: '/pizzas/chorizo fresh.webp',
       categoryId: 1,
       ingredients: {
         connect: ingredients.slice(10, 40),
@@ -90,23 +90,71 @@ async function up() {
 
   await prisma.productItem.createMany({
     data: [
-			// pizza "Pepperoni fresh"
-      generateProductItem({ productId: pizza1.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza1.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza1.id, pizzaType: 2, size: 40 }),
+      // pizza "Pepperoni fresh"
+      generateProductItem({
+        productId: pizza1.id,
+        pizzaType: 1,
+        size: 20,
+      }),
+      generateProductItem({
+        productId: pizza1.id,
+        pizzaType: 2,
+        size: 30,
+      }),
+      generateProductItem({
+        productId: pizza1.id,
+        pizzaType: 2,
+        size: 40,
+      }),
 
       // Pizza "Cheese"
-      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 30 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 40 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 20 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 40 }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 1,
+        size: 20,
+      }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 1,
+        size: 30,
+      }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 1,
+        size: 40,
+      }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 2,
+        size: 20,
+      }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 2,
+        size: 30,
+      }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 2,
+        size: 40,
+      }),
 
       // Pizza "Chorizo fresh"
-      generateProductItem({ productId: pizza3.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 40 }),
+      generateProductItem({
+        productId: pizza3.id,
+        pizzaType: 1,
+        size: 20,
+      }),
+      generateProductItem({
+        productId: pizza3.id,
+        pizzaType: 2,
+        size: 30,
+      }),
+      generateProductItem({
+        productId: pizza3.id,
+        pizzaType: 2,
+        size: 40,
+      }),
 
       // Other products
       generateProductItem({ productId: 1 }),
@@ -126,16 +174,48 @@ async function up() {
       generateProductItem({ productId: 15 }),
       generateProductItem({ productId: 16 }),
       generateProductItem({ productId: 17 }),
-		],
+    ],
+  });
+
+  await prisma.productItem.createMany({
+    data: [],
+  });
+
+  await prisma.cart.createMany({
+    data: [
+      {
+        userId: 1,
+        totalAmount: 0,
+        token: '11111',
+      },
+      {
+        userId: 2,
+        totalAmount: 0,
+        token: '22222',
+      },
+    ],
+  });
+
+  await prisma.cartItem.create({
+    data: {
+      productItemId: 1,
+      cartId: 1,
+      quantity: 2,
+      ingredients: {
+        connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
+      },
+    },
   });
 }
 
 async function down() {
   await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "Category" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "CartItem" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "ProductItem" RESTART IDENTITY CASCADE`;
-	await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE`;
 }
 
 async function main() {
