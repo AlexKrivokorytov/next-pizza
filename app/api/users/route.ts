@@ -1,0 +1,19 @@
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "../../../prisma/prisma-client";
+
+export async function GET() {
+	const users = await prisma.user.findMany()
+
+	prisma.
+
+	return NextResponse.json(users)
+}
+
+export async function POST(request: NextRequest) {
+	const data = await request.json()
+
+	const user = await prisma.user.create({
+		data: data,
+	})
+	return NextResponse.json(user)
+}
