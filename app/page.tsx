@@ -1,5 +1,5 @@
 import { Container, Title } from '../components/shared';
-import { Filter } from '../components/shared/filters';
+import { Filters } from '../components/shared/filters';
 import { ProductsGroupList } from '../components/shared/products-group-list';
 import { TopBar } from '../components/shared/top-bar';
 
@@ -15,7 +15,7 @@ export default function Home() {
         <div className="flex gap-[80px]">
           {/*Filters*/}
           <div className="w-[250px]">
-            <Filter />
+            <Filters />
           </div>
           {/*List of Products*/}
           <div className="flex-1">

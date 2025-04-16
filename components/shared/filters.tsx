@@ -1,15 +1,25 @@
+'use client';
+
 import React from 'react';
 import { Title } from './title';
 import { FilterCheckbox } from './filter-checkbox';
 import { Input } from '../ui';
 import { RangeSlider } from './range-slider';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
+import { useFilterIngredients } from '../../hooks/useFilterIngredients';
 
 interface FiltersProps {
   className?: string;
 }
 
-export const Filter: React.FC<FiltersProps> = ({ className }) => {
+export const Filters: React.FC<FiltersProps> = ({ className }) => {
+  const { ingredients } = useFilterIngredients();
+
+  const items = ingredients.map((item) => ({
+    text: item.name,
+    value: String(item.id),
+  }));
+
   return (
     <div className={className}>
       <Title text="Фильтрация" size="sm" className="mb-5 font-bold" />
@@ -39,106 +49,9 @@ export const Filter: React.FC<FiltersProps> = ({ className }) => {
         title="Ingredients"
         className="mt-5"
         limit={6}
-        defaultItems={[
-          {
-            text: 'Cheese sauce',
-            value: '1',
-          },
-          {
-            text: 'Mozzarella',
-            value: '2',
-          },
-          {
-            text: 'Garlic',
-            value: '3',
-          },
-          {
-            text: 'Pickles',
-            value: '4',
-          },
-          {
-            text: 'Red onion',
-            value: '5',
-          },
-          {
-            text: 'Tomatoes',
-            value: '6',
-          },
-        ]}
-        items={[
-          {
-            text: 'Cheese sauce',
-            value: '1',
-          },
-          {
-            text: 'Mozzarella',
-            value: '2',
-          },
-          {
-            text: 'Garlic',
-            value: '3',
-          },
-          {
-            text: 'Pickles',
-            value: '4',
-          },
-          {
-            text: 'Red onion',
-            value: '5',
-          },
-          {
-            text: 'Tomatoes',
-            value: '6',
-          },
-          {
-            text: 'Cheese sauce',
-            value: '1',
-          },
-          {
-            text: 'Mozzarella',
-            value: '2',
-          },
-          {
-            text: 'Garlic',
-            value: '3',
-          },
-          {
-            text: 'Pickles',
-            value: '4',
-          },
-          {
-            text: 'Red onion',
-            value: '5',
-          },
-          {
-            text: 'Tomatoes',
-            value: '6',
-          },
-          {
-            text: 'Cheese sauce',
-            value: '1',
-          },
-          {
-            text: 'Mozzarella',
-            value: '2',
-          },
-          {
-            text: 'Garlic',
-            value: '3',
-          },
-          {
-            text: 'Pickles',
-            value: '4',
-          },
-          {
-            text: 'Red onion',
-            value: '5',
-          },
-          {
-            text: 'Tomatoes',
-            value: '6',
-          },
-        ]}
+        defaultItems={items.slice(0, 6)}
+        items={items}
+        loading={true}
       />
     </div>
   );
