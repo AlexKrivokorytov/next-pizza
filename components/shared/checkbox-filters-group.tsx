@@ -7,6 +7,7 @@ import {
 } from './filter-checkbox';
 import { Input } from '../ui/input';
 import { Skeleton } from '../ui';
+import { on } from 'events';
 
 type Item = FilterCheckboxProps;
 
@@ -16,10 +17,12 @@ interface CheckboxFiltersGroupProps {
   defaultItems: Item[];
   limit?: number;
   loading?: boolean;
-  searchInputPlaceHolder?: string;
+  searchInputPlaceholder?: string;
   className?: string;
-  onChange?: (values: string[]) => void;
+  onClickCheckbox?: (id: string) => void;
+  selectedIds?: Set<string>;
   defaultValue?: string[];
+  name?: string;
 }
 
 export const CheckboxFiltersGroup: React.FC<
@@ -32,7 +35,9 @@ export const CheckboxFiltersGroup: React.FC<
   loading = false,
   searchInputPlaceholder = 'Search...',
   className,
-  onChange,
+  onClickCheckbox,
+  selectedIds,
+  name,
   defaultValue,
 }) => {
   const [showAll, setShowAll] = React.useState(false);
@@ -55,6 +60,7 @@ export const CheckboxFiltersGroup: React.FC<
               className="h-6 mb-4 rounded-[8px] bg-gray-300"
             />
           ))}
+          <Skeleton className="w-28 h-6 mb-4 rounded-[8px] bg-gray-300" />
         </div>
       </div>
     );
@@ -86,8 +92,9 @@ export const CheckboxFiltersGroup: React.FC<
             text={item.text}
             value={item.value}
             endAdornment={item.endAdornment}
-            checked={false}
-            onCheckedChange={(ids) => console.log(ids)}
+            checked={selectedIds?.has(item.value)}
+            onCheckedChange={() => onClickCheckbox?.(item.value)}
+            name={name}
           />
         ))}
       </div>
