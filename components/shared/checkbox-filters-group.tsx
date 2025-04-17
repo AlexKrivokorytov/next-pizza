@@ -1,10 +1,7 @@
 'use client';
 
 import React from 'react';
-import {
-  FilterCheckboxProps,
-  FilterCheckbox,
-} from './filter-checkbox';
+import { FilterCheckboxProps, FilterCheckbox } from './filter-checkbox';
 import { Input } from '../ui/input';
 import { Skeleton } from '../ui';
 import { on } from 'events';
@@ -14,20 +11,18 @@ type Item = FilterCheckboxProps;
 interface CheckboxFiltersGroupProps {
   title: string;
   items: Item[];
-  defaultItems: Item[];
+  defaultItems?: Item[];
   limit?: number;
   loading?: boolean;
   searchInputPlaceholder?: string;
   className?: string;
   onClickCheckbox?: (id: string) => void;
-  selectedIds?: Set<string>;
+  selected?: Set<string>;
   defaultValue?: string[];
   name?: string;
 }
 
-export const CheckboxFiltersGroup: React.FC<
-  CheckboxFiltersGroupProps
-> = ({
+export const CheckboxFiltersGroup: React.FC<CheckboxFiltersGroupProps> = ({
   title,
   items,
   defaultItems,
@@ -36,16 +31,14 @@ export const CheckboxFiltersGroup: React.FC<
   searchInputPlaceholder = 'Search...',
   className,
   onClickCheckbox,
-  selectedIds,
+  selected,
   name,
   defaultValue,
 }) => {
   const [showAll, setShowAll] = React.useState(false);
 
   const [searchValue, setSearchValue] = React.useState('');
-  const onChangeSearchInput = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const onChangeSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
@@ -55,10 +48,7 @@ export const CheckboxFiltersGroup: React.FC<
         <p className="font-bold mb-3">{title}</p>
         <div className="space-y-3">
           {Array.from({ length: limit }).map((_, i) => (
-            <Skeleton
-              key={i}
-              className="h-6 mb-4 rounded-[8px] bg-gray-300"
-            />
+            <Skeleton key={i} className="h-6 mb-4 rounded-[8px] bg-gray-300" />
           ))}
           <Skeleton className="w-28 h-6 mb-4 rounded-[8px] bg-gray-300" />
         </div>
@@ -67,10 +57,8 @@ export const CheckboxFiltersGroup: React.FC<
   }
 
   const list = showAll
-    ? items.filter((item) =>
-        item.text.toLowerCase().includes(searchValue.toLowerCase()),
-      )
-    : defaultItems.slice(0, limit);
+    ? items.filter((item) => item.text.toLowerCase().includes(searchValue.toLowerCase()))
+    : (defaultItems || items).slice(0, limit);
 
   return (
     <div className={className}>
@@ -92,7 +80,7 @@ export const CheckboxFiltersGroup: React.FC<
             text={item.text}
             value={item.value}
             endAdornment={item.endAdornment}
-            checked={selectedIds?.has(item.value)}
+            checked={selected?.has(item.value)}
             onCheckedChange={() => onClickCheckbox?.(item.value)}
             name={name}
           />
@@ -100,15 +88,8 @@ export const CheckboxFiltersGroup: React.FC<
       </div>
 
       {items.length > limit && (
-        <div
-          className={
-            showAll ? 'border-t border-t-neutral-100 mt-4' : ''
-          }
-        >
-          <button
-            onClick={() => setShowAll(!showAll)}
-            className="text-primary mt-3"
-          >
+        <div className={showAll ? 'border-t border-t-neutral-100 mt-4' : ''}>
+          <button onClick={() => setShowAll(!showAll)} className="text-primary mt-3">
             {showAll ? 'Скрыть' : '+ Показать все'}
           </button>
         </div>

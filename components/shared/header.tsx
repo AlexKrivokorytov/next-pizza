@@ -18,19 +18,10 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
         {/* left part */}
         <Link href="/">
           <div className="flex items-center gap-4">
-            <Image
-              src={'/logo.png'}
-              alt="logo"
-              width={45}
-              height={45}
-            />
+            <Image src={'/logo.png'} alt="logo" width={45} height={45} />
             <div>
-              <h1 className="text-2xl uppercase font-black">
-                Next Pizza
-              </h1>
-              <p className="text-sm text-gray-400 leading-3">
-                better taste forever
-              </p>
+              <h1 className="text-2xl uppercase font-black">Next Pizza</h1>
+              <p className="text-sm text-gray-400 leading-3">better taste forever</p>
             </div>
           </div>
         </Link>
@@ -39,10 +30,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
         </div>
         {/* right part */}
         <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            className="flex items-center gap-1"
-          >
+          <Button variant="outline" className="flex items-center gap-1">
             <User size={24} />
             Sign in
           </Button>
@@ -51,11 +39,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
               <b>13$</b>
               <span className="h-full w-[1px] bg-white/30 mx-3" />
               <div className="flex items-center gap-1 transition duration-300 group-hover:opacity-0">
-                <ShoppingCart
-                  size={16}
-                  className=" relative"
-                  strokeWidth={2}
-                />
+                <ShoppingCart size={16} className=" relative" strokeWidth={2} />
                 <b>3</b>
               </div>
               <ArrowRight

@@ -21,9 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${nunito.variable} ${nunito.variable} antialiased`}
-      >
+      <body className={`${nunito.variable} ${nunito.variable} antialiased`}>
         <main className="min-h-screen">
           <Header />
           {children}

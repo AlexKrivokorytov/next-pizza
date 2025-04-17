@@ -25,21 +25,18 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
     setFocused(false);
   });
 
-  const debouncedSearch = useDebouncedCallback(
-    async (query: string) => {
-      setIsLoading(true);
-      try {
-        const response = await Api.products.search(query);
-        setProducts(response);
-      } catch (error) {
-        console.error('Error searching products:', error);
-        setProducts([]);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    200,
-  );
+  const debouncedSearch = useDebouncedCallback(async (query: string) => {
+    setIsLoading(true);
+    try {
+      const response = await Api.products.search(query);
+      setProducts(response);
+    } catch (error) {
+      console.error('Error searching products:', error);
+      setProducts([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, 200);
 
   // Fetch products when component mounts or when search query changes
   useEffect(() => {
@@ -105,9 +102,7 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
           <div
             className={cn(
               'absolute w-full bg-white rounded-xl py-2 top-14 shadow-md z-30',
-              isFirstFocus
-                ? 'animate-popup-in'
-                : 'transition-all duration-300 ease-in-out',
+              isFirstFocus ? 'animate-popup-in' : 'transition-all duration-300 ease-in-out',
               products.length > 0
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 -translate-y-2 pointer-events-none',
@@ -115,9 +110,7 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
             )}
           >
             {isLoading ? (
-              <div className="px-3 py-2 text-gray-500">
-                Loading...
-              </div>
+              <div className="px-3 py-2 text-gray-500">Loading...</div>
             ) : products.length > 0 ? (
               products.map((product) => (
                 <Link
@@ -135,9 +128,7 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
                 </Link>
               ))
             ) : (
-              <div className="px-3 py-2 text-gray-500">
-                No results found
-              </div>
+              <div className="px-3 py-2 text-gray-500">No results found</div>
             )}
           </div>
         )}

@@ -19,19 +19,10 @@ const categories = [
   { id: 8, name: 'Desserts' }, // Duplicate
 ];
 
-export const Categories: React.FC<CategoryProps> = ({
-  className,
-}) => {
-  const categoryActiveId = useCategoryStore(
-    (state) => state.activeId,
-  );
+export const Categories: React.FC<CategoryProps> = ({ className }) => {
+  const categoryActiveId = useCategoryStore((state) => state.activeId);
   return (
-    <nav
-      className={cn(
-        'inline-flex gap-1 bg-gray-50 p-1 rounded-2xl',
-        className,
-      )}
-    >
+    <nav className={cn('inline-flex gap-1 bg-gray-50 p-1 rounded-2xl', className)}>
       {categories.map(({ id, name }, index) => (
         <a
           className={cn(
