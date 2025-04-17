@@ -13,25 +13,24 @@ interface FiltersProps {
 
 export const Filters: React.FC<FiltersProps> = ({ className }) => {
   const {
-    // Ingredients
     ingredients,
     loading,
     selectedIngredients,
-    toggleIngredient,
-    setSelectedIngredients,
-
-    // Sizes
+    toggleId,
     sizes,
-    toggleSize,
-
-    // Pizza Types
+    toggleSizes,
     pizzaTypes,
-    togglePizzaType,
-
-    // Prices
+    togglePizzaTypes,
     prices,
     updatePrice,
+    setPrice,
   } = useFilters();
+
+  // Handler for input change with validation
+  const handleInputChange = (name: 'priceFrom' | 'priceTo', value: string) => {
+    const numValue = Number(value);
+    updatePrice(name, numValue);
+  };
 
   return (
     <div className={className}>
@@ -42,7 +41,7 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
         title="Pizza types"
         name="pizzaTypes"
         className="mb-5"
-        onClickCheckbox={togglePizzaType}
+        onClickCheckbox={togglePizzaTypes}
         selected={pizzaTypes}
         items={[
           { text: 'Thin', value: '1' },
@@ -54,7 +53,7 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
         title="Sizes"
         name="sizes"
         className="mb-5"
-        onClickCheckbox={toggleSize}
+        onClickCheckbox={toggleSizes}
         selected={sizes}
         items={[
           { text: '20 cm', value: '20' },
@@ -63,32 +62,46 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
         ]}
       />
 
+      {/* price filter */}
+      <div className="mt-5 border-y border-y-neutral-100 py-6 pb-7">
+        <p className="mb-3 font-bold">Price range</p>
+        <div className="flex gap-3 mb-5">
+          <Input
+            type="number"
+            placeholder="0"
+            min={0}
+            max={50}
+            value={prices.priceFrom !== undefined ? String(prices.priceFrom) : ''}
+            onChange={(e) => handleInputChange('priceFrom', e.target.value)}
+          />
+          <Input
+            type="number"
+            min={0}
+            max={50}
+            placeholder="50"
+            value={prices.priceTo !== undefined ? String(prices.priceTo) : ''}
+            onChange={(e) => handleInputChange('priceTo', e.target.value)}
+          />
+        </div>
+        <RangeSlider
+          min={0}
+          max={50}
+          step={0.5}
+          value={[prices.priceFrom || 0, prices.priceTo || 50]}
+          onValueChange={([priceFrom, priceTo]) => setPrice({ priceFrom, priceTo })}
+        />
+      </div>
       <CheckboxFiltersGroup
         title="Ingredients"
         name="ingredients"
-        className="mb-5"
-        onClickCheckbox={toggleIngredient}
-        selected={selectedIngredients}
+        className="mt-5"
+        limit={6}
+        defaultItems={ingredients.slice(0, 6)}
         items={ingredients}
         loading={loading}
+        onClickCheckbox={toggleId}
+        selected={selectedIngredients}
       />
-
-      <Title text="Price" size="sm" className="mb-5 font-bold" />
-
-      <div className="flex items-center gap-2">
-        <Input
-          type="number"
-          placeholder="From"
-          value={prices.priceFrom || ''}
-          onChange={(e) => updatePrice('priceFrom', Number(e.target.value))}
-        />
-        <Input
-          type="number"
-          placeholder="To"
-          value={prices.priceTo || ''}
-          onChange={(e) => updatePrice('priceTo', Number(e.target.value))}
-        />
-      </div>
     </div>
   );
 };
