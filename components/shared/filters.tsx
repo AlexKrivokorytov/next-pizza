@@ -6,6 +6,8 @@ import { Input } from '../ui';
 import { RangeSlider } from './range-slider';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
 import { useFilters } from '../../hooks/use-filters';
+import { useTheme } from '@/providers/theme-provider';
+import { cn } from '@/lib/utils';
 
 interface FiltersProps {
   className?: string;
@@ -25,6 +27,8 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
     updatePrice,
     setPrice,
   } = useFilters();
+  const { theme } = useTheme();
+  const isDarkPurple = theme === 'dark-purple';
 
   // Handler for input change with validation
   const handleInputChange = (name: 'priceFrom' | 'priceTo', value: string) => {
@@ -33,7 +37,13 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
   };
 
   return (
-    <div className={className}>
+    <div
+      className={cn(
+        'rounded-xl p-5 shadow-sm transition-colors',
+        isDarkPurple ? 'bg-secondary/70 shadow-gray-900/10' : 'bg-orange-50 shadow-orange-200/70',
+        className,
+      )}
+    >
       <Title text="Filtering" size="sm" className="mb-5 font-bold" />
 
       {/* pizza types checkbox */}
@@ -63,8 +73,15 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
       />
 
       {/* price filter */}
-      <div className="mt-5 border-y border-y-neutral-100 py-6 pb-7">
-        <p className="mb-3 font-bold">Price range</p>
+      <div
+        className={cn(
+          'mt-5 border-y py-6 pb-7',
+          isDarkPurple ? 'border-y-gray-700' : 'border-y-orange-200',
+        )}
+      >
+        <p className={cn('mb-3 font-bold', isDarkPurple ? 'text-foreground' : 'text-orange-900')}>
+          Price range
+        </p>
         <div className="flex gap-3 mb-5">
           <Input
             type="number"
@@ -73,6 +90,11 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
             max={50}
             value={prices.priceFrom !== undefined ? String(prices.priceFrom) : ''}
             onChange={(e) => handleInputChange('priceFrom', e.target.value)}
+            className={cn(
+              isDarkPurple
+                ? 'border-gray-700 text-foreground placeholder:text-gray-500 focus-visible:ring-primary/70 bg-secondary/30'
+                : 'border-orange-200 text-orange-900 placeholder:text-orange-400 focus-visible:ring-orange-500/70',
+            )}
           />
           <Input
             type="number"
@@ -81,6 +103,11 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
             placeholder="50"
             value={prices.priceTo !== undefined ? String(prices.priceTo) : ''}
             onChange={(e) => handleInputChange('priceTo', e.target.value)}
+            className={cn(
+              isDarkPurple
+                ? 'border-gray-700 text-foreground placeholder:text-gray-500 focus-visible:ring-primary/70 bg-secondary/30'
+                : 'border-orange-200 text-orange-900 placeholder:text-orange-400 focus-visible:ring-orange-500/70',
+            )}
           />
         </div>
         <RangeSlider

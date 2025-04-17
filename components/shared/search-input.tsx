@@ -3,11 +3,13 @@
 import { cn } from '@/lib/utils';
 import { Api } from '@/services/api-client';
 import { Product } from '@prisma/client';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useClickAway } from 'react-use';
 import { useDebouncedCallback } from 'use-debounce';
+import { useTheme } from '@/providers/theme-provider';
 
 interface Props {
   className?: string;
@@ -20,6 +22,9 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isFirstFocus, setIsFirstFocus] = React.useState(true);
   const ref = React.useRef(null);
+  const router = useRouter();
+  const { theme } = useTheme();
+  const isDarkPurple = theme === 'dark-purple';
 
   useClickAway(ref, () => {
     setFocused(false);
@@ -62,12 +67,20 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
     setIsFirstFocus(false);
   };
 
+  // Clear the search query
+  const handleClear = () => {
+    setSearchQuery('');
+    debouncedSearch('');
+    router.push('/');
+  };
+
   return (
     <>
       {focused && (
         <div
           className="fixed top-0 left-0 bottom-0 right-0 bg-black/50 z-30 transition-opacity duration-300 ease-in-out"
           style={{ opacity: focused ? 1 : 0 }}
+          onClick={() => setFocused(false)}
         />
       )}
 
@@ -82,13 +95,21 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
         <Search
           className={cn(
             'absolute top-1/2 translate-y-[-50%] left-3 h-5 transition-colors duration-300',
-            focused ? 'text-primary' : 'text-gray-400',
+            focused ? 'text-primary' : isDarkPurple ? 'text-foreground/60' : 'text-gray-400',
           )}
         />
         <input
           className={cn(
-            'rounded-2xl outline-none w-full pl-11 transition-all duration-300',
-            focused ? 'bg-white shadow-inner' : 'bg-gray-100',
+            'rounded-2xl outline-none w-full pl-11 pr-10 transition-all duration-300',
+            isDarkPurple
+              ? cn(
+                  'bg-secondary/80 focus:bg-secondary text-foreground',
+                  focused ? 'shadow-inner' : '',
+                )
+              : cn(
+                  'focus:bg-white text-gray-900',
+                  focused ? 'bg-white shadow-inner' : 'bg-gray-100',
+                ),
           )}
           type="text"
           placeholder="Search for pizza..."
@@ -98,10 +119,26 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 
+        {searchQuery && (
+          <button
+            onClick={handleClear}
+            className={cn(
+              'absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full',
+              isDarkPurple
+                ? 'text-foreground/60 hover:text-foreground'
+                : 'text-gray-400 hover:text-gray-600',
+              'hover:bg-gray-100/10 transition-colors',
+            )}
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
+
         {focused && (
           <div
             className={cn(
-              'absolute w-full bg-white rounded-xl py-2 top-14 shadow-md z-30',
+              'absolute w-full rounded-xl py-2 top-14 shadow-md z-30',
+              isDarkPurple ? 'bg-secondary' : 'bg-white',
               isFirstFocus ? 'animate-popup-in' : 'transition-all duration-300 ease-in-out',
               products.length > 0
                 ? 'opacity-100 translate-y-0'
@@ -110,13 +147,22 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
             )}
           >
             {isLoading ? (
-              <div className="px-3 py-2 text-gray-500">Loading...</div>
+              <div
+                className={cn('px-3 py-2', isDarkPurple ? 'text-foreground/60' : 'text-gray-500')}
+              >
+                Loading...
+              </div>
             ) : products.length > 0 ? (
               products.map((product) => (
                 <Link
                   onClick={onClickItem}
                   key={product.id}
-                  className="flex items-center gap-3 w-full px-3 py-2 hover:bg-primary/10 transition-colors duration-200"
+                  className={cn(
+                    'flex items-center gap-3 w-full px-3 py-2 transition-colors duration-200',
+                    isDarkPurple
+                      ? 'hover:bg-secondary/80 text-foreground'
+                      : 'hover:bg-primary/10 text-gray-900',
+                  )}
                   href={`/product/${product.id}`}
                 >
                   <img
@@ -128,7 +174,11 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
                 </Link>
               ))
             ) : (
-              <div className="px-3 py-2 text-gray-500">No results found</div>
+              <div
+                className={cn('px-3 py-2', isDarkPurple ? 'text-foreground/60' : 'text-gray-500')}
+              >
+                No results found
+              </div>
             )}
           </div>
         )}

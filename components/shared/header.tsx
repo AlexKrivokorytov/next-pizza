@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '../ui';
 import { ArrowRight, ShoppingCart, User } from 'lucide-react';
 import { SearchInput } from './search-input';
+import { ThemeToggle } from './theme-toggle';
 
 interface HeaderProps {
   className?: string;
@@ -30,6 +31,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
         </div>
         {/* right part */}
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <Button variant="outline" className="flex items-center gap-1">
             <User size={24} />
             Sign in

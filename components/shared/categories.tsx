@@ -3,6 +3,7 @@
 import React from 'react';
 import { cn } from '../../lib/utils';
 import { useCategoryStore } from '../../store/category';
+import { useTheme } from '../../providers/theme-provider';
 
 interface CategoryProps {
   className?: string;
@@ -21,15 +22,32 @@ const categories = [
 
 export const Categories: React.FC<CategoryProps> = ({ className }) => {
   const categoryActiveId = useCategoryStore((state) => state.activeId);
+  const { theme } = useTheme();
+  const isDarkPurple = theme === 'dark-purple';
+
   return (
-    <nav className={cn('inline-flex gap-1 bg-gray-50 p-1 rounded-2xl', className)}>
+    <nav
+      className={cn(
+        'inline-flex gap-1 p-1 rounded-2xl',
+        isDarkPurple ? 'bg-secondary' : 'bg-gray-50',
+        className,
+      )}
+    >
       {categories.map(({ id, name }, index) => (
         <a
           className={cn(
             'flex items-center font-bold h-11 rounded-2xl px-5 transition-colors',
             categoryActiveId === id
-              ? 'bg-white shadow-md shadow-gray-200 text-primary'
-              : 'hover:bg-gray-100',
+              ? cn(
+                  'shadow-md text-primary',
+                  isDarkPurple
+                    ? 'bg-secondary/80 shadow-purple-900/30'
+                    : 'bg-white shadow-gray-200',
+                )
+              : cn(
+                  'hover:bg-opacity-60',
+                  isDarkPurple ? 'hover:bg-secondary/80' : 'hover:bg-gray-100',
+                ),
           )}
           href={`/#${name}`}
           key={index}

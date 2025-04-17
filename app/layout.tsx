@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
 import './globals.css';
 import { Header } from '../components/shared';
+import { ThemeProvider } from '../providers/theme-provider';
 
 const nunito = Nunito({
   subsets: ['cyrillic', 'latin'],
@@ -21,11 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${nunito.variable} ${nunito.variable} antialiased`}>
-        <main className="min-h-screen">
-          <Header />
-          {children}
-        </main>
+      <body className={`${nunito.variable} antialiased`}>
+        <ThemeProvider>
+          <main className="min-h-screen">
+            <Header />
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );

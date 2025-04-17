@@ -4,6 +4,7 @@ import React from 'react';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 
 import { cn } from '@/lib/utils';
+import { useTheme } from '@/providers/theme-provider';
 
 type SliderProps = {
   className?: string;
@@ -22,6 +23,8 @@ const RangeSlider = React.forwardRef(
   ) => {
     const initialValue = Array.isArray(value) ? value : [min, max];
     const [localValues, setLocalValues] = React.useState(initialValue);
+    const { theme } = useTheme();
+    const isDarkPurple = theme === 'dark-purple';
 
     React.useEffect(() => {
       // Update localValues when the external value prop changes
@@ -46,8 +49,15 @@ const RangeSlider = React.forwardRef(
         className={cn('relative flex w-full touch-none select-none mb-6 items-center', className)}
         {...props}
       >
-        <SliderPrimitive.Track className="relative h-1 w-full grow overflow-hidden rounded-full bg-primary/20">
-          <SliderPrimitive.Range className="absolute h-full bg-primary" />
+        <SliderPrimitive.Track
+          className={cn(
+            'relative h-1 w-full grow overflow-hidden rounded-full',
+            isDarkPurple ? 'bg-gray-700' : 'bg-orange-200',
+          )}
+        >
+          <SliderPrimitive.Range
+            className={cn('absolute h-full', isDarkPurple ? 'bg-primary/80' : 'bg-orange-500')}
+          />
         </SliderPrimitive.Track>
         {localValues.map((value, index) => (
           <React.Fragment key={index}>
@@ -58,9 +68,18 @@ const RangeSlider = React.forwardRef(
                 top: `10px`,
               }}
             >
-              <span className="text-sm">{formatLabel ? formatLabel(value) : value}</span>
+              <span className={cn('text-sm', isDarkPurple ? 'text-gray-300' : 'text-orange-800')}>
+                {formatLabel ? formatLabel(value) : value}
+              </span>
             </div>
-            <SliderPrimitive.Thumb className="block h-4 w-4 rounded-full border border-primary/50 bg-white shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50" />
+            <SliderPrimitive.Thumb
+              className={cn(
+                'block h-4 w-4 rounded-full shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+                isDarkPurple
+                  ? 'border border-primary/80 bg-secondary'
+                  : 'border border-orange-500/70 bg-white',
+              )}
+            />
           </React.Fragment>
         ))}
       </SliderPrimitive.Root>
