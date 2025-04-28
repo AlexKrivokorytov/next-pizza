@@ -49,6 +49,8 @@ export const ChoosePizzaForm: React.FC<ChoosePizzaFormProps> = ({
   // Check if current combination is available
   const isAvailable = Boolean(selectedPizza);
 
+	console.log('selectedPizza', selectedPizza);
+
   return (
     <div
       className={cn(

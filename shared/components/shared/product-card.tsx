@@ -49,6 +49,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             alt={name}
             width={215}
             height={215}
+            priority
           />
         </div>
         <Title text={name} size="sm" className="mb-1 mt-3 font-bold" />
