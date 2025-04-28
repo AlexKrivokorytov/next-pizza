@@ -1,3 +1,4 @@
+// /shared/components/shared/pizza-image.tsx
 import { cn } from '@/shared/lib/utils';
 import React from 'react';
 
@@ -8,30 +9,25 @@ interface Props {
 }
 
 export const PizzaImage: React.FC<Props> = ({ imageUrl, size = 40, className }) => {
-  // Base size (largest)
-  const baseImageSize = 500;
-
   // Calculate scale factor based on pizza size
-  const scaleFactor = size === 20 ? 350 / baseImageSize : size === 30 ? 420 / baseImageSize : 1;
+  const scaleFactor = size === 20 ? 0.7 : size === 30 ? 0.85 : 1;
 
   return (
-    // Restore relative positioning for the main container
-    <div className={cn('flex items-center justify-center flex-1 relative w-full', className)}>
-      {/* Background circles with fixed sizes, positioned absolutely */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-dashed border-2 rounded-full border-gray-300 w-[450px] h-[450px]" />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-dotted border-2 rounded-full border-gray-200 w-[370px] h-[370px]" />
+    <div
+      className={cn('relative w-full aspect-square flex items-center justify-center', className)}
+    >
+      {/* Background circles with relative sizing that scales with container */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-dotted border-2 rounded-full border-gray-400/50 w-[75%] h-[75%]" />
+      <div className="absolute w-[65%] h-[65%] rounded-full border-2 border-dashed border-gray-300/30" />
 
-      {/* Pizza image - Relative position, use scale transform for animation */}
+      {/* Pizza image - Use responsive width with aspect ratio preservation */}
       <img
         src={imageUrl}
         alt="Pizza"
         style={{
-          width: `${baseImageSize}px`, // Base width
-          height: `${baseImageSize}px`, // Base height
-          transform: `scale(${scaleFactor})`, // Apply scale
+          transform: `scale(${scaleFactor})`, // Apply scale based on size
         }}
-        // Use relative positioning within the flex container
-        className="relative z-10 transition-transform duration-500 ease-in-out transform-gpu"
+        className="relative z-10 w-[80%] h-auto object-contain transition-transform duration-500 ease-in-out transform-gpu"
       />
     </div>
   );

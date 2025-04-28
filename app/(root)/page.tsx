@@ -1,5 +1,8 @@
 import { Container, Filters, TopBar, Title, ProductsGroupList } from '@/shared/components/shared';
 import { prisma } from '@/prisma/prisma-client';
+import { Button } from '@/shared/components/ui';
+import { Filter } from 'lucide-react'; // Assuming lucide-react is installed or install it
+import { FilterDrawer } from '@/shared/components/shared/filter-drawer'; // We will create this component
 
 export default async function Home() {
   const categories = await prisma.category.findMany({
@@ -25,13 +28,23 @@ export default async function Home() {
 
       <Container className="mt-10 pb-14">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-[80px]">
-          {/* Filters Sidebar */}
-          <div className="w-full lg:w-[250px] lg:sticky lg:top-10 lg:self-start">
+          {/* Filters Sidebar - Hidden on screens smaller than lg */}
+          <div className="hidden lg:block lg:w-[250px] lg:sticky lg:top-10 lg:self-start">
             <Filters />
           </div>
 
           {/* Products List */}
           <div className="flex-1">
+            {/* Drawer Trigger Button - Visible only on screens smaller than lg */}
+            <div className="lg:hidden mb-6">
+              <FilterDrawer>
+                <Button variant="outline" className="w-full flex items-center gap-2">
+                  <Filter size={18} />
+                  Filters
+                </Button>
+              </FilterDrawer>
+            </div>
+
             {categoriesWithProducts.length > 0 ? (
               <div className="flex flex-col gap-16">
                 {categoriesWithProducts.map((category) => (

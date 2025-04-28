@@ -1,3 +1,4 @@
+// /shared/components/shared/modals/choose-product-modal.tsx
 'use client';
 
 import React from 'react';
@@ -24,7 +25,7 @@ export const ChooseProductModal: React.FC<ChooseProductModalProps> = ({ product,
     <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
       <DialogContent
         className={cn(
-          'p-0 w-[1060px] max-w-[1060px] min-h-[550px] overflow-hidden rounded-2xl',
+          'p-0 w-[95vw] max-w-[1060px] max-h-[90vh] overflow-hidden rounded-2xl',
           isDarkPurple ? 'bg-secondary border-border' : 'bg-white border-none',
           classname,
         )}
