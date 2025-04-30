@@ -17,6 +17,16 @@ interface Props {
   className?: string;
 }
 
+/**
+ * Renders a group of selectable variant buttons (e.g., pizza sizes/types).
+ *
+ * @param items - Array of variant options to display.
+ * @param onClick - Handler called with the selected variant value.
+ * @param selectedValue - Currently selected variant value.
+ * @param className - Additional class names for the group.
+ *
+ * @returns A button group for selecting a variant.
+ */
 export const GroupVariants: React.FC<Props> = ({ items, onClick, className, selectedValue }) => {
   const { theme } = useTheme();
   const isDarkPurple = theme === 'dark-purple';

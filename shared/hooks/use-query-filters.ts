@@ -16,6 +16,11 @@ interface SerializableFilters {
   selectedIngredients: string[];
 }
 
+/**
+ * Custom React hook to sync filter state with the URL query string using debounce.
+ *
+ * @param filters - Filters object to sync with the URL.
+ */
 export const useQueryFilters = (filters: Filters) => {
   const router = useRouter();
   const pathname = usePathname();

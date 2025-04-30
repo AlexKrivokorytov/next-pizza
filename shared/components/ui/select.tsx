@@ -60,6 +60,16 @@ const SelectScrollDownButton = React.forwardRef<
 ));
 SelectScrollDownButton.displayName = SelectPrimitive.ScrollDownButton.displayName;
 
+/**
+ * Select content component using Radix UI, with scroll buttons and viewport.
+ *
+ * @param className - Additional class names for the select content.
+ * @param children - Select option elements.
+ * @param position - Positioning mode (default: popper).
+ * @param ...props - Additional content props.
+ *
+ * @returns A styled select dropdown content element.
+ */
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>

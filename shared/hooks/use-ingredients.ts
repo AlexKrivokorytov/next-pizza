@@ -12,6 +12,11 @@ interface UseIngredientsReturn {
   loading: boolean;
 }
 
+/**
+ * Custom React hook to fetch and provide a list of available ingredients.
+ *
+ * @returns Ingredients array and loading state.
+ */
 export const useIngredients = (): UseIngredientsReturn => {
   const [ingredients, setIngredients] = React.useState<IngredientItem[]>([]);
   const [loading, setLoading] = React.useState(true);

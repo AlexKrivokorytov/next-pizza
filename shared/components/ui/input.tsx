@@ -2,6 +2,15 @@ import * as React from 'react';
 
 import { cn } from '@/shared/lib/utils';
 
+/**
+ * Styled input component for text and form fields.
+ *
+ * @param className - Additional class names for the input.
+ * @param type - Input type (e.g., text, password, email).
+ * @param ...props - Standard input props.
+ *
+ * @returns A styled input element.
+ */
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
   ({ className, type, ...props }, ref) => {
     return (

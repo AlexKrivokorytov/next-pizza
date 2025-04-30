@@ -8,6 +8,13 @@ interface ThemeToggleProps {
   className?: string;
 }
 
+/**
+ * Theme toggle button for switching between light and dark-purple themes.
+ *
+ * @param className - Additional class names for the toggle button.
+ *
+ * @returns A button that toggles the app theme.
+ */
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
   const { theme, toggleTheme } = useTheme();
   const isDarkPurple = theme === 'dark-purple';

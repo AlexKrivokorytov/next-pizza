@@ -13,6 +13,13 @@ interface FiltersProps {
   className?: string;
 }
 
+/**
+ * Renders the pizza filters panel with types, sizes, price range, and ingredients.
+ *
+ * @param className - Additional class names for the filters panel.
+ *
+ * @returns A filter section with checkboxes, range slider, and input fields.
+ */
 export const Filters: React.FC<FiltersProps> = ({ className }) => {
   const { ingredients, loading } = useIngredients();
   const filters = useFilters();

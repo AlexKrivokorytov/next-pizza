@@ -16,6 +16,17 @@ interface ProductCardProps {
   className?: string;
 }
 
+/**
+ * Displays a pizza product card with image, name, price, and add-to-cart button.
+ *
+ * @param id - Product item ID.
+ * @param name - Product name.
+ * @param price - Product price.
+ * @param imageUrl - Product image URL.
+ * @param className - Additional class names for the card.
+ *
+ * @returns A card element with product details and add-to-cart functionality.
+ */
 export const ProductCard: React.FC<ProductCardProps> = ({
   id,
   name,

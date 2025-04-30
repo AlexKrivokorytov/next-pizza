@@ -24,6 +24,11 @@ interface ProductModalStore {
   closeModal: () => void;
 }
 
+/**
+ * Zustand store for managing the product modal state and selected product.
+ *
+ * @returns Modal open state, selected product, and modal control handlers.
+ */
 export const useProductModal = create<ProductModalStore>((set) => ({
   isOpen: false,
   product: null,

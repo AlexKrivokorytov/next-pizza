@@ -11,6 +11,16 @@ const PopoverTrigger = PopoverPrimitive.Trigger;
 
 const PopoverAnchor = PopoverPrimitive.Anchor;
 
+/**
+ * Popover content component using Radix UI, with custom alignment and offset.
+ *
+ * @param className - Additional class names for the popover content.
+ * @param align - Alignment of the popover (default: center).
+ * @param sideOffset - Offset from the trigger element (default: 4).
+ * @param ...props - Additional content props.
+ *
+ * @returns A styled popover content element.
+ */
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>

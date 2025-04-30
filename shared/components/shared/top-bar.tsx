@@ -14,6 +14,14 @@ interface TopBarProps {
   className?: string;
 }
 
+/**
+ * Sticky top bar with categories navigation and sort popup for the pizza app.
+ *
+ * @param categories - Array of category objects to display in navigation.
+ * @param className - Additional class names for the top bar.
+ *
+ * @returns A sticky header with categories and sorting controls.
+ */
 export const TopBar: React.FC<TopBarProps> = ({ categories, className }) => {
   const { theme } = useTheme();
   const isDarkPurple = theme === 'dark-purple';

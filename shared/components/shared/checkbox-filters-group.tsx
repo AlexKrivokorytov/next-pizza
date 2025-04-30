@@ -22,6 +22,23 @@ interface CheckboxFiltersGroupProps {
   name?: string;
 }
 
+/**
+ * Group of filter checkboxes with optional search, loading, and show-all functionality.
+ *
+ * @param title - Title of the filter group.
+ * @param items - Array of checkbox items to display.
+ * @param defaultItems - Default items to show before expanding.
+ * @param limit - Number of items to show before 'show all'.
+ * @param loading - Whether to show loading skeletons.
+ * @param searchInputPlaceholder - Placeholder for the search input.
+ * @param className - Additional class names for the group container.
+ * @param onClickCheckbox - Handler for checkbox click events.
+ * @param selected - Set of selected item values.
+ * @param defaultValue - Default selected values.
+ * @param name - Name attribute for checkboxes.
+ *
+ * @returns A filter group with checkboxes, search, and expand/collapse.
+ */
 export const CheckboxFiltersGroup: React.FC<CheckboxFiltersGroupProps> = ({
   title,
   items,

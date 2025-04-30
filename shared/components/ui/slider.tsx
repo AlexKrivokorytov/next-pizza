@@ -5,6 +5,14 @@ import * as SliderPrimitive from '@radix-ui/react-slider';
 
 import { cn } from '@/shared/lib/utils';
 
+/**
+ * Radix UI slider component for selecting a numeric value or range.
+ *
+ * @param className - Additional class names for the slider.
+ * @param ...props - Slider root props.
+ *
+ * @returns A styled slider input element.
+ */
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>

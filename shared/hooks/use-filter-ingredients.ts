@@ -11,6 +11,13 @@ interface ReturnProps {
   setSelectedIngredients: (ids: string[]) => void;
 }
 
+/**
+ * Custom React hook to fetch and manage pizza ingredients with selection state.
+ *
+ * @param values - Initial selected ingredient IDs.
+ *
+ * @returns Ingredients, loading state, selected ingredients, and selection handlers.
+ */
 export const useFilterIngredients = (values: string[] = []): ReturnProps => {
   const [ingredients, setIngredients] = React.useState<Ingredient[]>([]);
   const [loading, setLoading] = React.useState(true);

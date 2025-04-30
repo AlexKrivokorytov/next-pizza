@@ -10,6 +10,18 @@ export interface FilterCheckboxProps {
   name?: string;
 }
 
+/**
+ * Checkbox component for filtering with optional adornment and controlled state.
+ *
+ * @param text - Label text for the checkbox.
+ * @param value - Value of the checkbox.
+ * @param checked - Whether the checkbox is checked.
+ * @param onCheckedChange - Handler for checked state change.
+ * @param endAdornment - Optional node displayed at the end.
+ * @param name - Name attribute for the checkbox.
+ *
+ * @returns A styled checkbox with label and optional adornment.
+ */
 export const FilterCheckbox: React.FC<FilterCheckboxProps> = ({
   text,
   value,

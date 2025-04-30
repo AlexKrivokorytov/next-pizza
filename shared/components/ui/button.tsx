@@ -36,6 +36,17 @@ export interface ButtonProps
   asChild?: boolean;
 }
 
+/**
+ * Shadcn UI button component with multiple variants and sizes.
+ *
+ * @param variant - Visual style of the button (default, destructive, outline, etc.).
+ * @param size - Size of the button (default, sm, lg, icon).
+ * @param asChild - Render as child component (for Slot usage).
+ * @param className - Additional class names.
+ * @param ...props - Standard button props.
+ *
+ * @returns A styled button element or custom component.
+ */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';

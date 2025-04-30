@@ -5,6 +5,11 @@ import { ChevronDown } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../../providers/theme-provider';
 
+/**
+ * Sort popup component for selecting pizza sorting order (e.g., popular, price).
+ *
+ * @returns A dropdown UI for selecting sort type.
+ */
 export const SortPopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSortType, setSelectedSortType] = useState('Popular');

@@ -15,6 +15,14 @@ interface ChooseProductModalProps {
   classname?: string;
 }
 
+/**
+ * Modal dialog for choosing a product or pizza, displaying the appropriate form.
+ *
+ * @param product - Product object with relations (ingredients, items, etc.).
+ * @param classname - Additional class names for the modal container.
+ *
+ * @returns A modal dialog with a product or pizza selection form.
+ */
 export const ChooseProductModal: React.FC<ChooseProductModalProps> = ({ product, classname }) => {
   const router = useRouter();
   const { theme } = useTheme();

@@ -29,6 +29,15 @@ const DialogOverlay = React.forwardRef<
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
+/**
+ * Dialog content component using Radix UI, with overlay and close button.
+ *
+ * @param className - Additional class names for the dialog content.
+ * @param children - Dialog content elements.
+ * @param ...props - Additional content props.
+ *
+ * @returns A styled dialog content element with overlay and close button.
+ */
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>

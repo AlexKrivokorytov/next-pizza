@@ -11,6 +11,16 @@ interface ChooseProductFormProps {
   onClickAdd?: VoidFunction;
 }
 
+/**
+ * Displays a form for choosing a pizza product with image, name, and add-to-cart button.
+ *
+ * @param imageUrl - Product image URL.
+ * @param name - Product name.
+ * @param classname - Additional class names for the form container.
+ * @param onClickAdd - Handler for the add-to-cart button.
+ *
+ * @returns A form section with product details and add-to-cart action.
+ */
 export const ChooseProductForm: React.FC<ChooseProductFormProps> = ({
   name,
   imageUrl,

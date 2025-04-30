@@ -16,6 +16,13 @@ interface HeaderProps {
   className?: string;
 }
 
+/**
+ * Main site header with logo, search, theme toggle, sign-in, and cart controls.
+ *
+ * @param className - Additional class names for the header.
+ *
+ * @returns The header element with navigation and controls.
+ */
 export const Header: React.FC<HeaderProps> = ({ className }) => {
   const { totalItems, totalAmount } = useCartStore();
   const [isCartOpen, setIsCartOpen] = useState(false);

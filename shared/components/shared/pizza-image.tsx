@@ -8,6 +8,15 @@ interface Props {
   size?: 20 | 30 | 40;
 }
 
+/**
+ * Renders a pizza image with decorative background circles and responsive scaling.
+ *
+ * @param imageUrl - URL of the pizza image.
+ * @param size - Pizza size (20, 30, or 40 cm).
+ * @param className - Additional class names for the image container.
+ *
+ * @returns A styled pizza image with background effects.
+ */
 export const PizzaImage: React.FC<Props> = ({ imageUrl, size = 40, className }) => {
   // Calculate scale factor based on pizza size
   const scaleFactor = size === 20 ? 0.7 : size === 30 ? 0.85 : 1;

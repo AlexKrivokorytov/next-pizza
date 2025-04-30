@@ -33,6 +33,11 @@ export interface ReturnProps extends Filters {
 const MIN_PRICE = 0;
 const MAX_PRICE = 50;
 
+/**
+ * Custom React hook to manage pizza filter state and sync with URL parameters.
+ *
+ * @returns Filter state, setters, and handlers for pizza filtering.
+ */
 export const useFilters = (): ReturnProps => {
   const searchParams = useSearchParams() as unknown as URLSearchParams;
   const router = useRouter();

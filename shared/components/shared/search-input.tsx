@@ -15,6 +15,13 @@ interface Props {
   className?: string;
 }
 
+/**
+ * Search input component for pizzas with debounced API search and result dropdown.
+ *
+ * @param className - Additional class names for the search input container.
+ *
+ * @returns An interactive search input with results dropdown and clear button.
+ */
 export const SearchInput: React.FC<Props> = ({ className }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [focused, setFocused] = React.useState(false);

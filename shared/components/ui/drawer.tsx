@@ -31,6 +31,15 @@ const DrawerOverlay = React.forwardRef<
 ));
 DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
+/**
+ * Drawer content component using Vaul, with overlay and draggable handle.
+ *
+ * @param className - Additional class names for the drawer content.
+ * @param children - Drawer content elements.
+ * @param ...props - Additional content props.
+ *
+ * @returns A styled drawer content element with overlay and handle.
+ */
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>

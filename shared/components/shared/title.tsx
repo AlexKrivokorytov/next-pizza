@@ -9,6 +9,15 @@ interface Props {
   text: string;
 }
 
+/**
+ * Renders a responsive heading with configurable size and class names.
+ *
+ * @param text - The heading text content.
+ * @param size - The size of the heading (xs, sm, md, lg, xl, 2xl).
+ * @param className - Additional class names for the heading.
+ *
+ * @returns A heading element with the specified text and styles.
+ */
 export const Title: React.FC<Props> = ({ text, size = 'sm', className }) => {
   const mapTagBySize = {
     xs: 'h5',

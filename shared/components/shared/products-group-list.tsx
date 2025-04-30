@@ -18,6 +18,17 @@ interface ProductsGroupListProps {
   listClassName?: string;
 }
 
+/**
+ * Displays a group of products for a category with animation and intersection tracking.
+ *
+ * @param title - The group title.
+ * @param items - Array of product items to display.
+ * @param categoryId - Category ID for intersection tracking.
+ * @param className - Additional class names for the group container.
+ * @param listClassName - Additional class names for the product list grid.
+ *
+ * @returns A section with a title and a grid of product cards.
+ */
 export const ProductsGroupList: React.FC<ProductsGroupListProps> = ({
   className,
   title,

@@ -38,6 +38,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;
 }
 
+/**
+ * Custom hook to access the current theme and toggle function from ThemeProvider.
+ *
+ * @returns The theme context with current theme and toggleTheme function.
+ * @throws Error if used outside of ThemeProvider.
+ */
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {

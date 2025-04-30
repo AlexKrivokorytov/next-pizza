@@ -13,6 +13,14 @@ interface CartDropdownProps {
   onClose: () => void;
 }
 
+/**
+ * Dropdown component displaying the user's cart items, quantities, and total price.
+ *
+ * @param isOpen - Whether the dropdown is visible.
+ * @param onClose - Handler to close the dropdown.
+ *
+ * @returns A dropdown UI with cart items, quantity controls, and checkout button.
+ */
 export const CartDropdown: React.FC<CartDropdownProps> = ({ isOpen, onClose }) => {
   const { items, totalAmount, removeItem, updateQuantity } = useCartStore();
   const dropdownRef = useRef<HTMLDivElement>(null);

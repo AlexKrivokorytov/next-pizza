@@ -12,6 +12,14 @@ interface CategoryProps {
   items: Category[];
 }
 
+/**
+ * Navigation bar for pizza categories with active state highlighting.
+ *
+ * @param items - Array of category objects to display.
+ * @param className - Additional class names for the navigation bar.
+ *
+ * @returns A navigation bar with category buttons.
+ */
 export const Categories: React.FC<CategoryProps> = ({ items, className }) => {
   const categoryActiveId = useCategoryStore((state) => state.activeId);
   const { theme } = useTheme();

@@ -10,7 +10,20 @@ import { useTheme } from '../../../providers/theme-provider';
 import { useSet } from 'react-use';
 import { PizzaSize, pizzaSizes, PizzaType, mapPizzaType, pizzaTypes } from '../../constants/pizza';
 import { Ingredient, ProductItem } from '@prisma/client';
+import { calcTotalPizzaPrice } from '../../lib';
 
+/**
+ * Form for customizing and adding a pizza to the cart, with size, dough, and ingredients.
+ *
+ * @param imageUrl - Pizza image URL.
+ * @param name - Pizza name.
+ * @param classname - Additional class names for the form container.
+ * @param ingredients - List of available ingredients.
+ * @param items - List of pizza product items (variants).
+ * @param onClickAddCart - Handler for the add-to-cart button.
+ *
+ * @returns A form UI for pizza customization and cart action.
+ */
 interface ChoosePizzaFormProps {
   imageUrl: string;
   name: string;
@@ -39,17 +52,33 @@ export const ChoosePizzaForm: React.FC<ChoosePizzaFormProps> = ({
 
   // Calculate total price based on selected pizza and ingredients
   const selectedPizza = items.find((item) => item.pizzaType === type && item.size === size);
-  const basePrice = selectedPizza?.price || 0;
-  const ingredientsPrice = Array.from(selectedIngredients).reduce((total, id) => {
-    const ingredient = ingredients.find((ing) => ing.id === id);
-    return total + (ingredient?.price || 0);
-  }, 0);
-  const totalPrice = `${basePrice + ingredientsPrice}$`;
+  const totalPrice = `${calcTotalPizzaPrice(selectedPizza, selectedIngredients, ingredients).toFixed(2)}$`;
 
-  // Check if current combination is available
-  const isAvailable = Boolean(selectedPizza);
+  // Compute available pizzas for the selected type
+  const filteredPizzasByType = items.filter((item) => item.pizzaType === type);
+  // Compute available pizza sizes for the selected type
+  const availablePizzaSizes = pizzaSizes.map((item) => ({
+    name: item.name,
+    value: item.value,
+    disabled: !filteredPizzasByType.some((pizza) => Number(pizza.size) === Number(item.value)),
+  }));
 
-	console.log('selectedPizza', selectedPizza);
+  React.useEffect(() => {
+    // Check if the current size is available
+    const isAvailableSize = availablePizzaSizes.find(
+      (item) => Number(item.value) === size && !item.disabled,
+    );
+    // Find the first available size
+    const availableSize = availablePizzaSizes.find((item) => !item.disabled);
+
+    if (!isAvailableSize && availableSize) {
+      setSize(Number(availableSize.value) as PizzaSize);
+    }
+  }, [type, size, items]);
+
+  // Update isAvailable to only allow add to cart if the selected combination exists
+  const isAvailable = !!selectedPizza;
+  console.log('selectedPizza', selectedPizza);
 
   return (
     <div
@@ -111,7 +140,7 @@ export const ChoosePizzaForm: React.FC<ChoosePizzaFormProps> = ({
               Size:
             </h3>
             <GroupVariants
-              items={pizzaSizes}
+              items={availablePizzaSizes}
               selectedValue={String(size)}
               onClick={(selectedValue) => setSize(Number(selectedValue) as PizzaSize)}
             />

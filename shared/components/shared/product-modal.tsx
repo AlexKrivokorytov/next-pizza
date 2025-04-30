@@ -29,6 +29,15 @@ interface ProductModalProps {
   } | null;
 }
 
+/**
+ * Modal dialog for displaying product details, options, and add-to-cart functionality.
+ *
+ * @param isOpen - Whether the modal is visible.
+ * @param onClose - Handler to close the modal.
+ * @param product - Product object with details, items, and ingredients.
+ *
+ * @returns A modal dialog with product information and cart actions.
+ */
 export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product }) => {
   const { theme } = useTheme();
   const { addItem } = useCartStore();

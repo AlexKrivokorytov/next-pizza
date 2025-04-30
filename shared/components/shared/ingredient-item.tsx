@@ -14,6 +14,19 @@ interface Props {
   className?: string;
 }
 
+/**
+ * Displays a selectable pizza ingredient with image, name, price, and active state.
+ *
+ * @param imageUrl - Ingredient image URL.
+ * @param name - Ingredient name.
+ * @param price - Ingredient price.
+ * @param active - Whether the ingredient is selected.
+ * @param loading - Loading state for the ingredient.
+ * @param onClick - Click handler for selection.
+ * @param className - Additional class names for the item.
+ *
+ * @returns A button-like element representing an ingredient.
+ */
 export const IngredientItem: React.FC<Props> = ({
   className,
   active,

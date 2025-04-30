@@ -17,6 +17,19 @@ type SliderProps = {
   onValueChange?: (values: number[]) => void;
 };
 
+/**
+ * Range slider component for selecting a numeric range with labels and debounce.
+ *
+ * @param min - Minimum value of the range.
+ * @param max - Maximum value of the range.
+ * @param step - Step increment for the slider.
+ * @param value - Controlled value array for the slider.
+ * @param onValueChange - Callback when the value changes.
+ * @param formatLabel - Optional function to format value labels.
+ * @param className - Additional class names for the slider.
+ *
+ * @returns A styled range slider with draggable thumbs and value labels.
+ */
 const RangeSlider = React.forwardRef(
   (
     { className, min, max, step, formatLabel, value, onValueChange, ...props }: SliderProps,

@@ -9,6 +9,13 @@ interface FilterDrawerProps {
   children: React.ReactNode;
 }
 
+/**
+ * Drawer component for displaying pizza filters on mobile or small screens.
+ *
+ * @param children - The trigger element(s) to open the drawer.
+ *
+ * @returns A drawer UI containing the Filters panel.
+ */
 export const FilterDrawer: React.FC<FilterDrawerProps> = ({ children }) => {
   return (
     <Drawer direction="left">

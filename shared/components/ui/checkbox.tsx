@@ -6,6 +6,14 @@ import { Check } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
 
+/**
+ * Radix UI checkbox component for boolean selection.
+ *
+ * @param className - Additional class names for the checkbox.
+ * @param ...props - Checkbox root props.
+ *
+ * @returns A styled checkbox input element.
+ */
 const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
