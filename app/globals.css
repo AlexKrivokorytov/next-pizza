@@ -80,33 +80,33 @@ html {
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-  border-radius: 6px;
-  background: #fff;
+  background: transparent;
 }
 
 .dark-purple .scrollbar::-webkit-scrollbar-track {
-  background: hsl(270 50% 6%);
+  background: transparent;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  background: #dbdadd;
-  border-radius: 6px;
+  background: #d1d5db;
+  border-radius: 8px;
 }
 
 .dark-purple .scrollbar::-webkit-scrollbar-thumb {
-  background: hsl(280 30% 40%);
+  background: hsl(270 10% 25%);
+  border-radius: 8px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #dbdadd;
+  background: #9ca3af;
 }
 
 .dark-purple .scrollbar::-webkit-scrollbar-thumb:hover {
-  background: hsl(280 30% 50%);
+  background: hsl(270 10% 35%);
 }
 
 @layer utilities {

@@ -1,0 +1,129 @@
+'use client';
+
+import Link from 'next/link';
+import React from 'react';
+import Image from 'next/image';
+import { Title } from './title';
+import { Button } from '../ui';
+import { Plus } from 'lucide-react';
+import { useCartStore } from '@/store/cart';
+import { Ingredient } from '@prisma/client';
+import { useFilters } from '@/hooks';
+import { useTheme } from '@/providers/theme-provider';
+import { cn } from '@/lib/utils';
+
+interface ProductCardProps {
+  id?: string;
+  productItemId?: number;
+  name: string;
+  price: number;
+  imageUrl: string;
+  ingredients?: Ingredient[];
+  className?: string;
+}
+
+/**
+ * Displays a pizza product card with image, name, price, and add-to-cart button.
+ *
+ * @param id - Product item ID.
+ * @param name - Product name.
+ * @param price - Product price.
+ * @param imageUrl - Product image URL.
+ * @param className - Additional class names for the card.
+ *
+ * @returns A card element with product details and add-to-cart functionality.
+ */
+export const ProductCard: React.FC<ProductCardProps> = ({
+  id,
+  name,
+  price,
+  imageUrl,
+  ingredients,
+  className,
+  productItemId,
+}) => {
+  const { addItem } = useCartStore();
+  const { selectedIngredients, setSelectedIngredients } = useFilters();
+  const { theme } = useTheme();
+  const isDarkPurple = theme === 'dark-purple';
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    addItem({
+      id: Date.now(), 
+      productItemId: productItemId || Number(id) || 0,
+      name,
+      imageUrl,
+      price,
+      quantity: 1,
+    });
+  };
+
+  const handleIngredientClick = (e: React.MouseEvent, ingredientId: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedIngredients(String(ingredientId));
+  };
+
+  return (
+    <div className={className}>
+      <Link href={`/product/${id}`}>
+        <div className="flex justify-center p-6 bg-secondary rounded-lg h-[260px]">
+          <Image
+            className="w-[215px] h-[215px] object-cover"
+            src={imageUrl}
+            alt={name}
+            width={215}
+            height={215}
+            priority
+          />
+        </div>
+        <Title text={name} size="sm" className="mb-1 mt-3 font-bold" />
+        
+        {/* Ingredient Object Pills with Mini Images */}
+        {ingredients && ingredients.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-2 max-h-[72px] overflow-y-auto scrollbar-none">
+            {ingredients.map((ingredient) => {
+              const isSelected = selectedIngredients.has(String(ingredient.id));
+              return (
+                <div
+                  key={ingredient.id}
+                  onClick={(e) => handleIngredientClick(e, ingredient.id)}
+                  className={cn(
+                    'flex items-center gap-1 px-2 py-0.5 rounded-full border text-[11px] font-medium transition-all cursor-pointer select-none',
+                    isDarkPurple
+                      ? isSelected
+                        ? 'bg-primary/20 border-primary text-primary'
+                        : 'bg-secondary/40 border-gray-700 hover:border-gray-500 text-gray-300'
+                      : isSelected
+                        ? 'bg-orange-100 border-orange-500 text-orange-600'
+                        : 'bg-gray-100 border-gray-200 hover:border-gray-300 text-gray-600',
+                  )}
+                >
+                  <img
+                    src={ingredient.imageUrl}
+                    alt={ingredient.name}
+                    className="w-3.5 h-3.5 object-contain"
+                  />
+                  <span>{ingredient.name}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="flex justify-between items-center mt-4">
+          <span className="text-[20px]">
+            from <b>{price} $</b>
+          </span>
+          <Button variant="secondary" onClick={handleAddToCart}>
+            <Plus size={20} className="mr-1" />
+            Add
+          </Button>
+        </div>
+      </Link>
+    </div>
+  );
+};

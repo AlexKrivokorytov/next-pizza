@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import { Header } from '@/shared/components/shared';
+import { Header } from '@/components/shared';
 import { ThemeProvider } from '@/providers/theme-provider';
+import { NextAuthSessionProvider } from '@/providers/session-provider';
 
 export const metadata: Metadata = {
   title: 'Next Pizza',
@@ -15,12 +16,14 @@ export default function RootLayout({
   modal: React.ReactNode;
 }>) {
   return (
-    <ThemeProvider>
-      <main className="min-h-screen">
-        <Header />
-        {children}
-        {modal}
-      </main>
-    </ThemeProvider>
+    <NextAuthSessionProvider>
+      <ThemeProvider>
+        <main className="min-h-screen">
+          <Header />
+          {children}
+          {modal}
+        </main>
+      </ThemeProvider>
+    </NextAuthSessionProvider>
   );
 }

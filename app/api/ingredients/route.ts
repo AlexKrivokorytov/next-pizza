@@ -1,10 +1,11 @@
-import { prisma } from '../../../prisma/prisma-client';
 import { NextResponse } from 'next/server';
+import { withApiHandler } from '@/lib/api-handler';
+import { IngredientsService } from '@/lib/db/ingredients';
 
-export async function GET() {
-  const ingredients = await prisma.ingredient.findMany({});
-
+/**
+ * Handles GET requests to fetch all ingredients.
+ */
+export const GET = withApiHandler(async () => {
+  const ingredients = await IngredientsService.getAll();
   return NextResponse.json(ingredients);
-
-  // return NextResponse.json({});
-}
+});

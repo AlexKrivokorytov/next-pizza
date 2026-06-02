@@ -1,27 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '../../../prisma/prisma-client';
+import { z } from 'zod';
+import { withApiHandler } from '@/lib/api-handler';
+import { UsersService } from '@/lib/db/users';
 
-export async function GET() {
-  try {
-    const users = await prisma.user.findMany();
-    // Ensure users is always an array
-    const usersArray = users || [];
-    return NextResponse.json(usersArray);
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
-  }
-}
+const createUserSchema = z.object({
+  fullName: z.string().min(2, 'Full name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
 
-export async function POST(request: NextRequest) {
-  try {
-    const data = await request.json();
-    const user = await prisma.user.create({
-      data: data,
-    });
-    return NextResponse.json(user);
-  } catch (error) {
-    console.error('Error creating user:', error);
-    return NextResponse.json({ error: 'Failed to create user' }, { status: 500 });
-  }
-}
+/**
+ * Handles GET requests to fetch all users.
+ */
+export const GET = withApiHandler(async () => {
+  const users = await UsersService.getAll();
+  return NextResponse.json(users || []);
+});
+
+/**
+ * Handles POST requests to create a new user.
+ */
+export const POST = withApiHandler(async (req: NextRequest) => {
+  const body = await req.json();
+  const validData = createUserSchema.parse(body);
+  
+  const user = await UsersService.create(validData);
+  return NextResponse.json(user, { status: 201 });
+});

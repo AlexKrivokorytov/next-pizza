@@ -1,35 +1,48 @@
-import { Container, Filters, TopBar, Title, ProductsGroupList } from '@/shared/components/shared';
-import { prisma } from '@/prisma/prisma-client';
-import { Button } from '@/shared/components/ui';
-import { Filter } from 'lucide-react'; // Assuming lucide-react is installed or install it
-import { FilterDrawer } from '@/shared/components/shared/filter-drawer'; // We will create this component
+import { Container, Filters, TopBar, Title, ProductsGroupList } from '@/components/shared';
+import { Button } from '@/components/ui';
+import { Filter, Pizza } from 'lucide-react';
+import { FilterDrawer } from '@/components/shared/filter-drawer';
+import { CategoryService } from '@/lib/db/categories';
 
-export default async function Home() {
-  const categories = await prisma.category.findMany({
-    include: {
-      products: {
-        include: {
-          ingredients: true,
-          items: true,
-        },
-      },
-    },
+export const dynamic = 'force-dynamic';
+
+interface SearchParams {
+  priceFrom?: string;
+  priceTo?: string;
+  sizes?: string;
+  pizzaTypes?: string;
+  ingredients?: string;
+}
+
+export default async function Home({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const params = await searchParams;
+
+  const priceFrom = params.priceFrom && !isNaN(Number(params.priceFrom)) ? Number(params.priceFrom) : undefined;
+  const priceTo = params.priceTo && !isNaN(Number(params.priceTo)) ? Number(params.priceTo) : undefined;
+  const sizesArr = params.sizes ? params.sizes.split(',').map(Number) : undefined;
+  const pizzaTypesArr = params.pizzaTypes ? params.pizzaTypes.split(',').map(Number) : undefined;
+  const ingredientsArr = params.ingredients ? params.ingredients.split(',').map(Number) : undefined;
+
+  const categoriesWithProducts = await CategoryService.getCategoriesWithProducts({
+    priceFrom,
+    priceTo,
+    sizesArr,
+    pizzaTypesArr,
+    ingredientsArr,
   });
 
-  // Filter out categories with no products
-  const categoriesWithProducts = categories.filter((category) => category.products.length > 0);
 
   return (
     <>
       <Container className="mt-10">
         <Title text="Pizzas" size="lg" className="font-extrabold" />
       </Container>
-      <TopBar categories={categories.filter((category) => category.products.length > 0)} />
+      <TopBar categories={categoriesWithProducts} />
 
       <Container className="mt-10 pb-14">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-[80px]">
           {/* Filters Sidebar - Hidden on screens smaller than lg */}
-          <div className="hidden lg:block lg:w-[250px] lg:sticky lg:top-10 lg:self-start">
+          <div className="hidden lg:block lg:w-[250px] lg:sticky lg:top-[100px] lg:self-start lg:max-h-[calc(100vh-100px)] lg:overflow-y-auto lg:scrollbar">
             <Filters />
           </div>
 
@@ -60,7 +73,9 @@ export default async function Home() {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-32 text-center">
-                <div className="text-5xl mb-4">🍕</div>
+                <div className="mb-4">
+                  <Pizza size={64} className="text-orange-400" />
+                </div>
                 <h2 className="text-2xl font-bold mb-2">No products found</h2>
                 <p className="text-gray-500 max-w-md">
                   We couldn't find any products that match your criteria. Try adjusting your

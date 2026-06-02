@@ -57,7 +57,7 @@ async function up() {
 
   const pizza1 = await prisma.product.create({
     data: {
-      name: 'Пепперони фреш',
+      name: 'Fresh Pepperoni',
       imageUrl: '/pizzas/pepperoni_fresh.avif',
       categoryId: 1,
       ingredients: {
@@ -84,6 +84,39 @@ async function up() {
       categoryId: 1,
       ingredients: {
         connect: ingredients.slice(10, 40),
+      },
+    },
+  });
+
+  const pizza4 = await prisma.product.create({
+    data: {
+      name: 'Margarita',
+      imageUrl: '/pizzas/cheese.webp',
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(1, 3).concat(ingredients.slice(10, 11)), // Mozzarella, Cheddar, Fresh tomatoes
+      },
+    },
+  });
+
+  const pizza5 = await prisma.product.create({
+    data: {
+      name: 'Meat Overload',
+      imageUrl: '/pizzas/pepperoni_fresh.webp',
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(6, 9).concat(ingredients.slice(16, 17)), // Ham, Pepperoni, Chorizo, Meatballs
+      },
+    },
+  });
+
+  const pizza6 = await prisma.product.create({
+    data: {
+      name: 'Hawaiian',
+      imageUrl: '/pizzas/hypnotica.png',
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(6, 7).concat(ingredients.slice(12, 13)), // Ham, Pineapple
       },
     },
   });
@@ -156,24 +189,71 @@ async function up() {
         size: 40,
       }),
 
+      // Pizza "Margarita"
+      generateProductItem({ productId: pizza4.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza4.id, pizzaType: 1, size: 30 }),
+      generateProductItem({ productId: pizza4.id, pizzaType: 2, size: 40 }),
+
+      // Pizza "Meat Overload"
+      generateProductItem({ productId: pizza5.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza5.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza5.id, pizzaType: 2, size: 40 }),
+
+      // Pizza "Hawaiian"
+      generateProductItem({ productId: pizza6.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza6.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza6.id, pizzaType: 2, size: 40 }),
+
       // Other products
-      generateProductItem({ productId: 1 }),
-      generateProductItem({ productId: 2 }),
-      generateProductItem({ productId: 3 }),
-      generateProductItem({ productId: 4 }),
-      generateProductItem({ productId: 5 }),
-      generateProductItem({ productId: 6 }),
-      generateProductItem({ productId: 7 }),
-      generateProductItem({ productId: 8 }),
-      generateProductItem({ productId: 9 }),
-      generateProductItem({ productId: 10 }),
-      generateProductItem({ productId: 11 }),
-      generateProductItem({ productId: 12 }),
-      generateProductItem({ productId: 13 }),
-      generateProductItem({ productId: 14 }),
-      generateProductItem({ productId: 15 }),
-      generateProductItem({ productId: 16 }),
-      generateProductItem({ productId: 17 }),
+      generateProductItem({ productId: 1 }), // Omelet ham/mushrooms
+
+      generateProductItem({ productId: 2 }), // Omelet pepperoni
+
+      // Breakfast Latte variants
+      { productId: 3, price: 2.50, size: 300 },
+      { productId: 3, price: 3.20, size: 400 },
+      { productId: 3, price: 3.80, size: 500 },
+
+      generateProductItem({ productId: 4 }), // Denwich
+
+      // Chicken nuggets variants (6, 9, 12 pcs)
+      { productId: 5, price: 3.50, size: 6 },
+      { productId: 5, price: 4.80, size: 9 },
+      { productId: 5, price: 5.90, size: 12 },
+
+      generateProductItem({ productId: 6 }), // Potatoes
+      generateProductItem({ productId: 7 }), // Dodster
+      generateProductItem({ productId: 8 }), // Spicy Dodster
+
+      // Milkshake variants (300, 500 ml)
+      { productId: 9, price: 2.90, size: 300 },
+      { productId: 9, price: 3.90, size: 500 },
+      { productId: 10, price: 2.90, size: 300 },
+      { productId: 10, price: 3.90, size: 500 },
+      { productId: 11, price: 3.20, size: 300 },
+      { productId: 11, price: 4.20, size: 500 },
+      { productId: 12, price: 2.70, size: 300 },
+      { productId: 12, price: 3.70, size: 500 },
+
+      // Hot drinks variants (300, 400, 500 ml)
+      { productId: 13, price: 2.80, size: 300 },
+      { productId: 13, price: 3.50, size: 400 },
+      { productId: 13, price: 4.10, size: 500 },
+
+      { productId: 14, price: 2.80, size: 300 },
+      { productId: 14, price: 3.50, size: 400 },
+      { productId: 14, price: 4.10, size: 500 },
+
+      { productId: 15, price: 2.90, size: 300 },
+      { productId: 15, price: 3.60, size: 400 },
+      { productId: 15, price: 4.20, size: 500 },
+
+      { productId: 16, price: 1.90, size: 300 },
+      { productId: 16, price: 2.50, size: 400 },
+
+      { productId: 17, price: 2.50, size: 300 },
+      { productId: 17, price: 3.20, size: 400 },
+      { productId: 17, price: 3.80, size: 500 },
     ],
   });
 
