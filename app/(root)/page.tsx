@@ -12,6 +12,7 @@ interface SearchParams {
   sizes?: string;
   pizzaTypes?: string;
   ingredients?: string;
+  sortBy?: string;
 }
 
 export default async function Home({ searchParams }: { searchParams: Promise<SearchParams> }) {
@@ -22,6 +23,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
   const sizesArr = params.sizes ? params.sizes.split(',').map(Number) : undefined;
   const pizzaTypesArr = params.pizzaTypes ? params.pizzaTypes.split(',').map(Number) : undefined;
   const ingredientsArr = params.ingredients ? params.ingredients.split(',').map(Number) : undefined;
+  const sortBy = params.sortBy;
 
   const categoriesWithProducts = await CategoryService.getCategoriesWithProducts({
     priceFrom,
@@ -29,7 +31,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
     sizesArr,
     pizzaTypesArr,
     ingredientsArr,
+    sortBy,
   });
+
 
 
   return (

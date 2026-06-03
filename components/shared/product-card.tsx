@@ -8,7 +8,6 @@ import { Button } from '../ui';
 import { Plus } from 'lucide-react';
 import { useCartStore } from '@/store/cart';
 import { Ingredient } from '@prisma/client';
-import { useFilters } from '@/hooks';
 import { useTheme } from '@/providers/theme-provider';
 import { cn } from '@/lib/utils';
 
@@ -43,7 +42,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   productItemId,
 }) => {
   const { addItem } = useCartStore();
-  const { selectedIngredients, setSelectedIngredients } = useFilters();
   const { theme } = useTheme();
   const isDarkPurple = theme === 'dark-purple';
 
@@ -61,11 +59,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     });
   };
 
-  const handleIngredientClick = (e: React.MouseEvent, ingredientId: number) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setSelectedIngredients(String(ingredientId));
-  };
+
 
   return (
     <div className={className}>
@@ -84,33 +78,38 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         
         {/* Ingredient Object Pills with Mini Images */}
         {ingredients && ingredients.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-2 max-h-[72px] overflow-y-auto scrollbar-none">
-            {ingredients.map((ingredient) => {
-              const isSelected = selectedIngredients.has(String(ingredient.id));
-              return (
-                <div
-                  key={ingredient.id}
-                  onClick={(e) => handleIngredientClick(e, ingredient.id)}
-                  className={cn(
-                    'flex items-center gap-1 px-2 py-0.5 rounded-full border text-[11px] font-medium transition-all cursor-pointer select-none',
-                    isDarkPurple
-                      ? isSelected
-                        ? 'bg-primary/20 border-primary text-primary'
-                        : 'bg-secondary/40 border-gray-700 hover:border-gray-500 text-gray-300'
-                      : isSelected
-                        ? 'bg-orange-100 border-orange-500 text-orange-600'
-                        : 'bg-gray-100 border-gray-200 hover:border-gray-300 text-gray-600',
-                  )}
-                >
-                  <img
-                    src={ingredient.imageUrl}
-                    alt={ingredient.name}
-                    className="w-3.5 h-3.5 object-contain"
-                  />
-                  <span>{ingredient.name}</span>
-                </div>
-              );
-            })}
+          <div className="flex flex-wrap gap-1.5 mt-2 max-h-[72px] overflow-hidden">
+            {ingredients.slice(0, 3).map((ingredient) => (
+              <div
+                key={ingredient.id}
+                className={cn(
+                  'flex items-center gap-1 px-2 py-0.5 rounded-full border text-[11px] font-medium',
+                  isDarkPurple
+                    ? 'bg-secondary/40 border-gray-700 text-gray-300'
+                    : 'bg-gray-100 border-gray-200 text-gray-600',
+                )}
+              >
+                <img
+                  src={ingredient.imageUrl}
+                  alt={ingredient.name}
+                  className="w-3.5 h-3.5 object-contain"
+                />
+                <span>{ingredient.name}</span>
+              </div>
+            ))}
+            
+            {ingredients.length > 3 && (
+              <div
+                className={cn(
+                  'flex items-center gap-1 px-2 py-0.5 rounded-full border text-[11px] font-medium',
+                  isDarkPurple
+                    ? 'bg-secondary/40 border-gray-700 text-gray-300'
+                    : 'bg-gray-100 border-gray-200 text-gray-600',
+                )}
+              >
+                <span>+{ingredients.length - 3} more</span>
+              </div>
+            )}
           </div>
         )}
 

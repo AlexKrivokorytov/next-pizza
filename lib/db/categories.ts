@@ -6,6 +6,7 @@ export interface CategorySearchParams {
   sizesArr?: number[];
   pizzaTypesArr?: number[];
   ingredientsArr?: number[];
+  sortBy?: string;
 }
 
 export class CategoryService {
@@ -16,7 +17,7 @@ export class CategoryService {
    * @returns Array of categories with filtered products
    */
   static async getCategoriesWithProducts(params: CategorySearchParams) {
-    const { priceFrom, priceTo, sizesArr, pizzaTypesArr, ingredientsArr } = params;
+    const { priceFrom, priceTo, sizesArr, pizzaTypesArr, ingredientsArr, sortBy = 'popular' } = params;
 
     const priceFilter = {
       ...(priceFrom !== undefined && { gte: priceFrom }),
@@ -91,7 +92,33 @@ export class CategoryService {
       },
     });
 
-    // Filter out categories with no products
-    return categories.filter((category) => category.products.length > 0);
+    // Filter out categories with no products and apply sorting
+    return categories
+      .filter((category) => category.products.length > 0)
+      .map((category) => {
+        const sortedProducts = [...category.products].sort((a, b) => {
+          // Get the lowest price from items for product A
+          const priceA = Math.min(...a.items.map((i) => i.price));
+          // Get the lowest price from items for product B
+          const priceB = Math.min(...b.items.map((i) => i.price));
+
+          switch (sortBy) {
+            case 'price_asc':
+              return priceA - priceB;
+            case 'price_desc':
+              return priceB - priceA;
+            case 'popular':
+            default:
+              // For popular, we'll sort by ID descending (newest) as a fallback
+              // since there's no rating field
+              return b.id - a.id;
+          }
+        });
+
+        return {
+          ...category,
+          products: sortedProducts,
+        };
+      });
   }
 }

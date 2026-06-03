@@ -1,7 +1,84 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* =========================================================
+   Tailwind v4 theme configuration (replaces tailwind.config.ts)
+   ========================================================= */
+@theme {
+  /* Fonts */
+  --font-nunito: var(--font-nunito), sans-serif;
+
+  /* Radius tokens */
+  --radius: 1rem;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Semantic color tokens (light mode defaults) */
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(20 14.3% 4.1%);
+
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(20 14.3% 4.1%);
+
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(20 14.3% 4.1%);
+
+  --color-primary: hsl(22 100% 50%);
+  --color-primary-foreground: hsl(60 9.1% 97.8%);
+
+  --color-secondary: hsl(32 100% 98%);
+  --color-secondary-foreground: hsl(24 9.8% 10%);
+
+  --color-muted: hsl(60 4.8% 95.9%);
+  --color-muted-foreground: hsl(25 5.3% 44.7%);
+
+  --color-accent: hsl(60 4.8% 95.9%);
+  --color-accent-foreground: hsl(24 9.8% 10%);
+
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(60 9.1% 97.8%);
+
+  --color-border: hsl(20 5.9% 90%);
+  --color-input: hsl(0 0% 90%);
+  --color-ring: hsl(24.6 95% 53.1%);
+}
+
+/* =========================================================
+   Dark-purple theme overrides
+   ========================================================= */
+.dark-purple {
+  --color-background: hsl(270 50% 4%);
+  --color-foreground: hsl(270 10% 95%);
+
+  --color-card: hsl(270 50% 6%);
+  --color-card-foreground: hsl(270 10% 95%);
+
+  --color-popover: hsl(270 50% 6%);
+  --color-popover-foreground: hsl(270 10% 95%);
+
+  --color-primary: hsl(280 100% 60%);
+  --color-primary-foreground: hsl(270 10% 95%);
+
+  --color-secondary: hsl(270 30% 10%);
+  --color-secondary-foreground: hsl(270 10% 95%);
+
+  --color-muted: hsl(270 30% 15%);
+  --color-muted-foreground: hsl(270 10% 70%);
+
+  --color-accent: hsl(270 30% 15%);
+  --color-accent-foreground: hsl(270 10% 95%);
+
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(60 9.1% 97.8%);
+
+  --color-border: hsl(270 30% 15%);
+  --color-input: hsl(270 30% 12%);
+  --color-ring: hsl(280 100% 60%);
+}
+
+/* =========================================================
+   Base styles
+   ========================================================= */
 html {
   scroll-behavior: smooth;
 }
@@ -12,73 +89,19 @@ html {
   }
 }
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 20 14.3% 4.1%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 20 14.3% 4.1%;
-
-    --primary: 22 100% 50%;
-    --primary-foreground: 60 9.1% 97.8%;
-
-    --secondary: 32 100% 98%;
-    --secondary-foreground: 24 9.8% 10%;
-
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
-
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
-
-    --border: 20 5.9% 90%;
-    --input: 0 0% 90%;
-    --ring: 24.6 95% 53.1%;
-    --radius: 1rem;
-  }
-
-  .dark-purple {
-    --background: 270 50% 4%;
-    --foreground: 270 10% 95%;
-
-    --card: 270 50% 6%;
-    --card-foreground: 270 10% 95%;
-
-    --popover: 270 50% 6%;
-    --popover-foreground: 270 10% 95%;
-
-    --primary: 280 100% 60%;
-    --primary-foreground: 270 10% 95%;
-
-    --secondary: 270 30% 10%;
-    --secondary-foreground: 270 10% 95%;
-
-    --muted: 270 30% 15%;
-    --muted-foreground: 270 10% 70%;
-
-    --accent: 270 30% 15%;
-    --accent-foreground: 270 10% 95%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
-
-    --border: 270 30% 15%;
-    --input: 270 30% 12%;
-    --ring: 280 100% 60%;
-  }
-}
-
 * {
   font-family: var(--font-nunito), sans-serif;
+  border-color: var(--color-border);
 }
 
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* =========================================================
+   Custom scrollbar
+   ========================================================= */
 .scrollbar::-webkit-scrollbar {
   width: 6px;
 }
@@ -109,17 +132,62 @@ html {
   background: hsl(270 10% 35%);
 }
 
+/* =========================================================
+   Utilities
+   ========================================================= */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+/* =========================================================
+   shadcn/Radix backward-compatibility aliases
+   Tailwind v4 uses --color-* naming convention.
+   shadcn components reference the old --ring, --primary etc.
+   These aliases ensure both systems work simultaneously.
+   ========================================================= */
+:root {
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+  --card: var(--color-card);
+  --card-foreground: var(--color-card-foreground);
+  --popover: var(--color-popover);
+  --popover-foreground: var(--color-popover-foreground);
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-primary-foreground);
+  --secondary: var(--color-secondary);
+  --secondary-foreground: var(--color-secondary-foreground);
+  --muted: var(--color-muted);
+  --muted-foreground: var(--color-muted-foreground);
+  --accent: var(--color-accent);
+  --accent-foreground: var(--color-accent-foreground);
+  --destructive: var(--color-destructive);
+  --destructive-foreground: var(--color-destructive-foreground);
+  --border: var(--color-border);
+  --input: var(--color-input);
+  --ring: var(--color-ring);
+  --radius: 1rem;
+}
+
+.dark-purple {
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+  --card: var(--color-card);
+  --card-foreground: var(--color-card-foreground);
+  --popover: var(--color-popover);
+  --popover-foreground: var(--color-popover-foreground);
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-primary-foreground);
+  --secondary: var(--color-secondary);
+  --secondary-foreground: var(--color-secondary-foreground);
+  --muted: var(--color-muted);
+  --muted-foreground: var(--color-muted-foreground);
+  --accent: var(--color-accent);
+  --accent-foreground: var(--color-accent-foreground);
+  --destructive: var(--color-destructive);
+  --destructive-foreground: var(--color-destructive-foreground);
+  --border: var(--color-border);
+  --input: var(--color-input);
+  --ring: var(--color-ring);
 }

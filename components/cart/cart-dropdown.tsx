@@ -7,6 +7,7 @@ import { Button } from '@/components/ui';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/providers/theme-provider';
+import { useRouter } from 'next/navigation';
 
 interface CartDropdownProps {
   isOpen: boolean;
@@ -25,6 +26,7 @@ export const CartDropdown: React.FC<CartDropdownProps> = ({ isOpen, onClose }) =
   const { items, totalAmount, removeItem, updateQuantity } = useCartStore();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
+  const router = useRouter();
 
   // Close when clicking outside
   useEffect(() => {
@@ -126,7 +128,15 @@ export const CartDropdown: React.FC<CartDropdownProps> = ({ isOpen, onClose }) =
                 <span className="font-bold">${totalAmount.toFixed(2)}</span>
               </div>
 
-              <Button className="w-full">Checkout</Button>
+              <Button 
+                className="w-full"
+                onClick={() => {
+                  onClose();
+                  router.push('/checkout');
+                }}
+              >
+                Checkout
+              </Button>
             </div>
           </>
         )}

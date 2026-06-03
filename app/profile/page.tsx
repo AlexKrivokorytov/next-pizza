@@ -1,16 +1,20 @@
 import { Container, Title } from '@/components/shared';
 import { prisma } from '@/prisma/prisma-client';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ProfilePage() {
-  // In a real application, you would fetch the user's session here
-  // const session = await getServerSession(authOptions);
-  // if (!session) redirect('/');
+  const session = await getServerSession(authOptions);
+  
+  if (!session?.user?.email) {
+    redirect('/');
+  }
 
-  // Mocking user fetch for now based on seeded DB
   const user = await prisma.user.findFirst({
-    where: { email: 'Jane@example.com' },
+    where: { email: session.user.email },
     include: { orders: true },
   });
 

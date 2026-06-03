@@ -38,7 +38,7 @@ export const useQueryFilters = (filters: Filters) => {
         scroll: false,
       });
     }
-  }, 500); // 500ms debounce
+  }, 200); // 200ms debounce
 
   React.useEffect(() => {
     if (isMounted.current) {

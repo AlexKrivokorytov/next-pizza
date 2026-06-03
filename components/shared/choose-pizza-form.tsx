@@ -11,6 +11,7 @@ import { useSet } from 'react-use';
 import { PizzaSize, pizzaSizes, PizzaType, mapPizzaType, pizzaTypes } from '../../constants/pizza';
 import { Ingredient, ProductItem } from '@prisma/client';
 import { calcTotalPizzaPrice } from '../../lib';
+import { ChoosePizzaIngredients } from './choose-pizza-ingredients';
 
 /**
  * Form for customizing and adding a pizza to the cart, with size, dough, and ingredients.
@@ -78,7 +79,7 @@ export const ChoosePizzaForm: React.FC<ChoosePizzaFormProps> = ({
 
   // Update isAvailable to only allow add to cart if the selected combination exists
   const isAvailable = !!selectedPizza;
-  console.log('selectedPizza', selectedPizza);
+
 
   return (
     <div
@@ -163,38 +164,12 @@ export const ChoosePizzaForm: React.FC<ChoosePizzaFormProps> = ({
             />
           </div>
 
-          {/* Ingredients Options - Allow this section to scroll */}
-          <div className="flex flex-col flex-1 min-h-0">
-            <h3
-              className={cn(
-                'text-xs sm:text-sm font-semibold mb-2',
-                isDarkPurple ? 'text-foreground' : 'text-gray-800',
-              )}
-            >
-              Add ingredients:
-            </h3>
-            <div
-              className={cn(
-                'grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg',
-                'min-w-[250px] w-full',
-                'overflow-y-auto flex-grow',
-                'scrollbar',
-                isDarkPurple ? 'bg-muted' : 'bg-white',
-              )}
-            >
-              {ingredients.map((ingredient) => (
-                <IngredientItem
-                  key={ingredient.id}
-                  imageUrl={ingredient.imageUrl}
-                  name={ingredient.name}
-                  price={ingredient.price}
-                  active={selectedIngredients.has(ingredient.id)}
-                  onClick={() => toggleIngredient(ingredient.id)}
-                  className="min-w-[80px] min-h-[80px] w-full h-full"
-                />
-              ))}
-            </div>
-          </div>
+          {/* Ingredients Options */}
+          <ChoosePizzaIngredients
+            ingredients={ingredients}
+            selectedIds={selectedIngredients as Set<number>}
+            onClick={toggleIngredient}
+          />
         </div>
 
         {/* Add to Cart Button */}

@@ -1,7 +1,15 @@
-import { PrismaClient } from '@prisma/client'; // 1.6k (gzipped: 835)
+import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 
+/**
+ * Creates a PrismaClient instance using the @prisma/adapter-pg driver adapter.
+ * In Prisma v7+, a driver adapter is required for all database connections.
+ * The DATABASE_URL must be a valid postgresql:// connection string.
+ */
 const prismaClientSingleton = () => {
-  return new PrismaClient();
+  const connectionString = process.env.DATABASE_URL!;
+  const adapter = new PrismaPg({ connectionString });
+  return new PrismaClient({ adapter });
 };
 
 declare global {

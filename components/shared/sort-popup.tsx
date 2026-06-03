@@ -4,15 +4,30 @@ import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useTheme } from '@/providers/theme-provider';
+import { useRouter, useSearchParams } from 'next/navigation';
+import qs from 'qs';
+
+export type SortType = 'popular' | 'price_asc' | 'price_desc';
+
+const sortLabels: Record<SortType, string> = {
+  popular: 'Popular',
+  price_asc: 'Price: Low to High',
+  price_desc: 'Price: High to Low',
+};
 
 /**
  * Sort popup component for selecting pizza sorting order (e.g., popular, price).
+ * Synced with URL search params.
  *
  * @returns A dropdown UI for selecting sort type.
  */
 export const SortPopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedSortType, setSelectedSortType] = useState('Popular');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  const selectedSortType = (searchParams.get('sortBy') as SortType) || 'popular';
+  
   const { theme } = useTheme();
   const isDarkPurple = theme === 'dark-purple';
 
@@ -20,9 +35,25 @@ export const SortPopup: React.FC = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleSortTypeSelect = (sortType: string) => {
-    setSelectedSortType(sortType);
+  const handleSortTypeSelect = (sortType: SortType) => {
     setIsOpen(false);
+    
+    // Parse current params
+    const currentParams = qs.parse(searchParams.toString());
+    
+    // Update sort param
+    const newParams = {
+      ...currentParams,
+      sortBy: sortType,
+    };
+    
+    // Remove if default
+    if (sortType === 'popular') {
+      delete (newParams as any).sortBy;
+    }
+    
+    const query = qs.stringify(newParams, { skipNulls: true, arrayFormat: 'comma' });
+    router.push(`?${query}`, { scroll: false });
   };
 
   return (
@@ -38,7 +69,7 @@ export const SortPopup: React.FC = () => {
           Sort by:
         </span>
         <b className={cn('mr-1', isDarkPurple ? 'text-foreground' : 'text-gray-900')}>
-          {selectedSortType}
+          {sortLabels[selectedSortType]}
         </b>
         <ChevronDown
           className={cn(
@@ -56,7 +87,7 @@ export const SortPopup: React.FC = () => {
             isDarkPurple ? 'bg-secondary' : 'bg-white',
           )}
         >
-          {['Popular', 'Price: Low to High', 'Price: High to Low'].map((sortType) => (
+          {(Object.entries(sortLabels) as [SortType, string][]).map(([sortType, label]) => (
             <div
               key={sortType}
               className={cn(
@@ -72,7 +103,7 @@ export const SortPopup: React.FC = () => {
               )}
               onClick={() => handleSortTypeSelect(sortType)}
             >
-              {sortType}
+              {label}
             </div>
           ))}
         </div>

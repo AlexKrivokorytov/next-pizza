@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 
 export class ApiError extends Error {
@@ -11,16 +11,18 @@ export class ApiError extends Error {
   }
 }
 
-export function withApiHandler(handler: Function) {
-  return async (...args: any[]) => {
+export function withApiHandler(
+  handler: (req: NextRequest, ...args: unknown[]) => Promise<NextResponse>
+) {
+  return async (req: NextRequest, ...args: unknown[]) => {
     try {
-      return await handler(...args);
+      return await handler(req, ...args);
     } catch (error) {
       console.error('[API Error]:', error);
       
       if (error instanceof ZodError) {
         return NextResponse.json(
-          { error: 'Validation Error', details: (error as any).errors },
+          { error: 'Validation Error', details: error.issues },
           { status: 400 }
         );
       }
