@@ -4,6 +4,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
+import { ProfileForm } from '@/components/shared/profile-form';
+
 export const dynamic = 'force-dynamic';
 
 export default async function ProfilePage() {
@@ -18,6 +20,10 @@ export default async function ProfilePage() {
     include: { orders: true },
   });
 
+  if (!user) {
+    redirect('/');
+  }
+
   return (
     <Container className="my-10">
       <Title text={`Profile: ${user?.fullName}`} size="lg" className="font-extrabold mb-8" />
@@ -25,16 +31,7 @@ export default async function ProfilePage() {
       <div className="flex gap-10">
         <div className="flex-1 rounded-xl bg-white dark:bg-gray-900 shadow-md p-7">
           <h2 className="text-xl font-bold mb-4">Personal Information</h2>
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-gray-500">Full Name</p>
-              <p className="font-medium">{user?.fullName}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Email Address</p>
-              <p className="font-medium">{user?.email}</p>
-            </div>
-          </div>
+          <ProfileForm user={user} />
         </div>
 
         <div className="flex-1 rounded-xl bg-white dark:bg-gray-900 shadow-md p-7">

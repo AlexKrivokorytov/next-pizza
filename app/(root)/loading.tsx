@@ -13,14 +13,14 @@ export default function Loading() {
         ))}
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8 lg:gap-[80px]">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-20">
         {/* Filters Sidebar Skeleton */}
-        <div className="hidden lg:block lg:w-[250px]">
+        <div className="hidden lg:block lg:w-62.5">
           <Skeleton className="h-8 w-32 mb-6" />
           <div className="space-y-4">
-            <Skeleton className="h-[200px] w-full rounded-xl" />
-            <Skeleton className="h-[150px] w-full rounded-xl" />
-            <Skeleton className="h-[300px] w-full rounded-xl" />
+            <Skeleton className="h-50 w-full rounded-xl" />
+            <Skeleton className="h-37.5 w-full rounded-xl" />
+            <Skeleton className="h-75 w-full rounded-xl" />
           </div>
         </div>
 
@@ -29,10 +29,10 @@ export default function Loading() {
           <div className="flex flex-col gap-16">
             <div className="w-full">
               <Skeleton className="h-8 w-48 mb-6" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[50px]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12.5">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <div key={i} className="flex flex-col">
-                    <Skeleton className="w-full h-[260px] rounded-xl mb-4" />
+                    <Skeleton className="w-full h-65 rounded-xl mb-4" />
                     <Skeleton className="h-6 w-3/4 mb-2" />
                     <Skeleton className="h-4 w-full mb-4" />
                     <div className="flex justify-between items-center mt-auto">

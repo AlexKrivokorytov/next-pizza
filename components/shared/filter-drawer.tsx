@@ -21,7 +21,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({ children }) => {
     <Drawer direction="left">
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent
-        className="left-0 right-auto w-[85vw] max-w-[300px] h-full p-4 rounded-r-lg rounded-l-none border-r"
+        className="left-0 right-auto w-[85vw] max-w-75 h-full p-4 rounded-r-lg rounded-l-none border-r"
         aria-label="Filters panel"
       >
         <div className="flex items-center justify-between mb-4">

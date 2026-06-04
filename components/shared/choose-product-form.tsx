@@ -38,7 +38,7 @@ export const ChooseProductForm: React.FC<ChooseProductFormProps> = ({
           <img
             src={imageUrl || '/images/default-pizza.png'}
             alt={name}
-            className="relative left-2 top-2 transition-all z-10 duration-300 w-[380px] h-[380px]"
+            className="relative left-2 top-2 transition-all z-10 duration-300 w-95 h-95"
           />
         </div>
       </div>
@@ -49,7 +49,7 @@ export const ChooseProductForm: React.FC<ChooseProductFormProps> = ({
 
         <Button
           onClick={() => onClickAdd?.(itemId)}
-          className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
+          className="h-13.75 px-10 text-base rounded-4.5 w-full mt-10"
         >
           Add to cart for {price}$
         </Button>

@@ -86,7 +86,7 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <Container className="mt-10 max-w-[800px] text-center">
+      <Container className="mt-10 max-w-200 text-center">
         <Title text="Checkout" size="lg" className="font-extrabold mb-8" />
         <p className="text-xl text-gray-500 mb-6">Your cart is empty.</p>
         <Button onClick={() => router.push('/')} size="lg">
@@ -180,7 +180,7 @@ export default function CheckoutPage() {
                   name="comment"
                   value={formData.comment}
                   onChange={handleInputChange}
-                  className="w-full min-h-[100px] p-3 rounded-md border bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full min-h-25 p-3 rounded-md border bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                   placeholder="Leave at the door..."
                 />
               </div>
@@ -189,14 +189,14 @@ export default function CheckoutPage() {
         </div>
 
         {/* Right side: Order Summary */}
-        <div className="w-full lg:w-[400px]">
+        <div className="w-full lg:w-100">
           <div className="bg-card p-6 rounded-lg shadow-sm border sticky top-24">
             <h2 className="text-xl font-bold mb-4">Order Summary</h2>
 
-            <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 mb-6 scrollbar">
+            <div className="space-y-4 max-h-100 overflow-y-auto pr-2 mb-6 scrollbar">
               {items.map((item) => (
                 <div key={item.id} className="flex gap-4 items-center">
-                  <div className="h-16 w-16 bg-secondary rounded-md overflow-hidden flex-shrink-0">
+                  <div className="h-16 w-16 bg-secondary rounded-md overflow-hidden shrink-0">
                     <Image
                       src={item.imageUrl}
                       alt={item.name}

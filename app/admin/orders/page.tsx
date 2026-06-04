@@ -54,11 +54,11 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
                         <div className="text-xs text-muted-foreground">{order.email}</div>
                       </td>
                       <td className="p-4 align-middle">
-                        <div className="truncate max-w-[200px]" title={order.address}>{order.address}</div>
+                        <div className="truncate max-w-50" title={order.address}>{order.address}</div>
                         <div className="text-xs text-muted-foreground">{order.phone}</div>
                       </td>
                       <td className="p-4 align-middle font-bold">${order.totalAmount.toFixed(2)}</td>
-                      <td className="p-4 align-middle w-[200px]">
+                      <td className="p-4 align-middle w-50">
                         <UpdateStatusSelect orderId={order.id} currentStatus={order.status} />
                       </td>
                     </tr>

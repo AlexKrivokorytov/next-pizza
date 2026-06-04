@@ -84,6 +84,7 @@ export const useFilters = (): ReturnProps => {
         console.error('Failed to parse filters from localStorage', e);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Save to localStorage when filters change

@@ -63,7 +63,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className={cn(
-          'w-[400px] p-8',
+          'w-100 p-8',
           isDarkPurple ? 'bg-secondary border-border' : 'bg-white border-none',
         )}
       >

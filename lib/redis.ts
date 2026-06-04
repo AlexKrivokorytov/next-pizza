@@ -4,7 +4,7 @@ const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
 declare global {
   // Preserve the singleton in Next.js hot-reload development mode
-  // eslint-disable-next-line no-var
+   
   var __redis: Redis | undefined;
 }
 

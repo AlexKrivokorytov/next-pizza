@@ -50,7 +50,7 @@ export default async function AdminUsersPage() {
                       <td className="p-4 align-middle text-muted-foreground">
                         {new Date(user.createdAt).toLocaleDateString()}
                       </td>
-                      <td className="p-4 align-middle w-[150px]">
+                      <td className="p-4 align-middle w-37.5">
                         <UpdateRoleSelect userId={user.id} currentRole={user.role} />
                       </td>
                     </tr>

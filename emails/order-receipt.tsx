@@ -94,7 +94,6 @@ export const OrderReceiptEmail = ({
   );
 };
 
-export default OrderReceiptEmail;
 
 const main = {
   backgroundColor: '#f6f9fc',

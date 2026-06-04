@@ -143,7 +143,7 @@ export default async function AdminDashboardPage() {
             {statusCounts.length > 0 ? (
               <OrderStatusChart data={statusCounts} />
             ) : (
-              <div className="h-[240px] flex items-center justify-center text-muted-foreground">
+              <div className="h-60 flex items-center justify-center text-muted-foreground">
                 No orders yet
               </div>
             )}

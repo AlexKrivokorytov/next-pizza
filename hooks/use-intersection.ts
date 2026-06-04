@@ -23,6 +23,7 @@ export function useIntersection<T extends HTMLElement = HTMLElement>(
       };
     }
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref, options.threshold, options.root, options.rootMargin]);
 
   return intersectionObserverEntry;

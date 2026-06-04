@@ -75,6 +75,7 @@ export const ChoosePizzaForm: React.FC<ChoosePizzaFormProps> = ({
     if (!isAvailableSize && availableSize) {
       setSize(Number(availableSize.value) as PizzaSize);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type, size, items]);
 
   // Update isAvailable to only allow add to cart if the selected combination exists
@@ -92,7 +93,7 @@ export const ChoosePizzaForm: React.FC<ChoosePizzaFormProps> = ({
       <div className="flex items-center justify-center p-4 sm:p-5 lg:p-6 max-w-full lg:max-w-[50%] lg:flex-1">
         <div className="relative w-full flex items-center justify-center">
           {/* Pizza container with responsive sizing */}
-          <div className="relative w-full max-w-[300px] sm:max-w-[350px] md:max-w-[400px] lg:max-w-none mx-auto">
+          <div className="relative w-full max-w-75 sm:max-w-87.5 md:max-w-100 lg:max-w-none mx-auto">
             {/* Background circles - only show on screens wider than 1024px (lg) */}
             <div className="hidden lg:flex absolute inset-0 items-center justify-center pointer-events-none">
               {/* Use relative units or scale with container? Let's try relative units based on container */}
@@ -129,7 +130,7 @@ export const ChoosePizzaForm: React.FC<ChoosePizzaFormProps> = ({
           {textDetails}
         </p>
 
-        <div className="flex flex-col gap-3 sm:gap-4 mt-4 sm:mt-5 flex-grow min-h-0">
+        <div className="flex flex-col gap-3 sm:gap-4 mt-4 sm:mt-5 grow min-h-0">
           {/* Size Options */}
           <div>
             <h3
@@ -181,7 +182,7 @@ export const ChoosePizzaForm: React.FC<ChoosePizzaFormProps> = ({
           }}
           disabled={!isAvailable}
           className={cn(
-            'h-[40px] sm:h-[45px] md:h-[50px] px-4 sm:px-6 text-sm sm:text-base rounded-lg w-full mt-4 sm:mt-6 font-bold flex-shrink-0',
+            'h-10 sm:h-11.25 md:h-12.5 px-4 sm:px-6 text-sm sm:text-base rounded-lg w-full mt-4 sm:mt-6 font-bold shrink-0',
             isDarkPurple ? 'bg-primary hover:bg-primary/90' : 'bg-primary hover:bg-primary/90',
             !isAvailable && 'opacity-50 cursor-not-allowed',
           )}

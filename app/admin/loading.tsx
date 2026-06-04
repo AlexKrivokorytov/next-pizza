@@ -44,7 +44,7 @@ export default function AdminLoading() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Skeleton className="h-[350px] w-full" />
+            <Skeleton className="h-87.5 w-full" />
           </CardContent>
         </Card>
 
@@ -53,7 +53,7 @@ export default function AdminLoading() {
             <CardTitle>Order Status</CardTitle>
           </CardHeader>
           <CardContent>
-            <Skeleton className="h-[240px] w-[240px] rounded-full mx-auto" />
+            <Skeleton className="h-60 w-60 rounded-full mx-auto" />
             <div className="mt-4 flex flex-col gap-2">
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-full" />

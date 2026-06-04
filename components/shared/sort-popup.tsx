@@ -83,7 +83,7 @@ export const SortPopup: React.FC = () => {
       {isOpen && (
         <div
           className={cn(
-            'absolute right-0 top-10 min-w-[180px] rounded-lg p-2 shadow-xl',
+            'absolute right-0 top-10 min-w-45 rounded-lg p-2 shadow-xl',
             isDarkPurple ? 'bg-secondary' : 'bg-white',
           )}
         >

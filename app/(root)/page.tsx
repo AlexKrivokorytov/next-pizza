@@ -44,9 +44,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
       <TopBar categories={categoriesWithProducts} />
 
       <Container className="mt-10 pb-14">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-[80px]">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-20">
           {/* Filters Sidebar - Hidden on screens smaller than lg */}
-          <div className="hidden lg:block lg:w-[250px] lg:sticky lg:top-[100px] lg:self-start lg:max-h-[calc(100vh-100px)] lg:overflow-y-auto lg:scrollbar">
+          <div className="hidden lg:block lg:w-62.5 lg:sticky lg:top-25 lg:self-start lg:max-h-[calc(100vh-100px)] lg:overflow-y-auto lg:scrollbar">
             <Filters categories={categoriesWithProducts} />
           </div>
 

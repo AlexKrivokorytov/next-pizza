@@ -6,7 +6,7 @@ import { Container } from './container';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../ui';
-import { ArrowRight, ShoppingCart, User } from 'lucide-react';
+import { ArrowRight, ShoppingCart, User, LayoutDashboard } from 'lucide-react';
 import { SearchInput } from './search-input';
 import { ThemeToggle } from './theme-toggle';
 import { useCartStore } from '@/store/cart';
@@ -56,6 +56,14 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
           <ThemeToggle />
           {session ? (
             <div className="flex items-center gap-2">
+              {session.user?.role === 'ADMIN' && (
+                <Link href="/admin">
+                  <Button variant="outline" className="flex items-center gap-1 border-primary text-primary hover:bg-primary/10">
+                    <LayoutDashboard size={24} />
+                    Admin
+                  </Button>
+                </Link>
+              )}
               <Link href="/profile">
                 <Button variant="outline" className="flex items-center gap-1">
                   <User size={24} />
@@ -76,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
           <div className="relative">
             <Button className="group relative" onClick={toggleCart}>
               <b>{totalAmount.toFixed(2)}$</b>
-              <span className="h-full w-[1px] bg-white/30 mx-3" />
+              <span className="h-full w-px bg-white/30 mx-3" />
               <div className="flex items-center gap-1 transition duration-300 group-hover:opacity-0">
                 <ShoppingCart size={16} className="relative" strokeWidth={2} />
                 <b>{totalItems}</b>

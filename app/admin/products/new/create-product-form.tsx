@@ -76,7 +76,7 @@ export function CreateProductForm({ categories, ingredients }: Props) {
             <label className="text-sm font-medium">Description</label>
             <textarea 
               required
-              className="w-full min-h-[100px] p-3 rounded-md border bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full min-h-25 p-3 rounded-md border bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               value={formData.description} 
               onChange={e => setFormData({ ...formData, description: e.target.value })} 
               placeholder="Delicious pizza with..." 
@@ -128,7 +128,7 @@ export function CreateProductForm({ categories, ingredients }: Props) {
           <CardContent className="p-6 space-y-4">
             <h3 className="font-bold">Base Ingredients (Recipe)</h3>
             <p className="text-sm text-muted-foreground mb-4">These are the core ingredients of the product. They are used for filtering.</p>
-            <div className="h-[300px] overflow-y-auto space-y-2 pr-2 scrollbar">
+            <div className="h-75 overflow-y-auto space-y-2 pr-2 scrollbar">
               {ingredients.map(ing => (
                 <label key={ing.id} className="flex items-center gap-2 cursor-pointer p-2 hover:bg-secondary rounded-md">
                   <input 
@@ -148,7 +148,7 @@ export function CreateProductForm({ categories, ingredients }: Props) {
           <CardContent className="p-6 space-y-4">
             <h3 className="font-bold">Add-ons (Optional)</h3>
             <p className="text-sm text-muted-foreground mb-4">These are optional ingredients the user can pay to add to the product.</p>
-            <div className="h-[300px] overflow-y-auto space-y-2 pr-2 scrollbar">
+            <div className="h-75 overflow-y-auto space-y-2 pr-2 scrollbar">
               {ingredients.map(ing => (
                 <label key={ing.id} className="flex items-center gap-2 cursor-pointer p-2 hover:bg-secondary rounded-md">
                   <input 

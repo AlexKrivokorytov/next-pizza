@@ -1,4 +1,7 @@
-FROM node:22-alpine AS base
+FROM node:lts-alpine AS base
+
+# Upgrade packages to patch vulnerabilities
+RUN apk update && apk upgrade --no-cache
 
 # Install dependencies only when needed
 FROM base AS deps

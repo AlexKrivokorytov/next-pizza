@@ -87,7 +87,7 @@ export function EditProductForm({ product, categories, ingredients }: Props) {
           <div className="space-y-2">
             <label className="text-sm font-medium">Description</label>
             <textarea
-              className="w-full min-h-[100px] p-3 rounded-md border bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full min-h-25 p-3 rounded-md border bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -125,7 +125,7 @@ export function EditProductForm({ product, categories, ingredients }: Props) {
             <p className="text-sm text-muted-foreground mb-3">
               Core ingredients used for search filtering.
             </p>
-            <div className="h-[300px] overflow-y-auto space-y-1 pr-2 scrollbar">
+            <div className="h-75 overflow-y-auto space-y-1 pr-2 scrollbar">
               {ingredients.map((ing) => (
                 <label
                   key={ing.id}
@@ -152,7 +152,7 @@ export function EditProductForm({ product, categories, ingredients }: Props) {
             <p className="text-sm text-muted-foreground mb-3">
               Optional paid add-ons users can add.
             </p>
-            <div className="h-[300px] overflow-y-auto space-y-1 pr-2 scrollbar">
+            <div className="h-75 overflow-y-auto space-y-1 pr-2 scrollbar">
               {ingredients.map((ing) => (
                 <label
                   key={ing.id}

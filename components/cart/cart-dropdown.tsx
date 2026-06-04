@@ -49,12 +49,12 @@ export const CartDropdown: React.FC<CartDropdownProps> = ({ isOpen, onClose }) =
 
   return (
     <div
-      className="absolute top-full right-0 mt-2 w-[400px] z-50 rounded-lg shadow-lg overflow-hidden"
+      className="absolute top-full right-0 mt-2 w-100 z-50 rounded-lg shadow-lg overflow-hidden"
       ref={dropdownRef}
     >
       <div
         className={cn(
-          'p-4 max-h-[500px] overflow-y-auto',
+          'p-4 max-h-125 overflow-y-auto',
           theme === 'dark-purple'
             ? 'bg-[#1f1934] border border-purple-800'
             : 'bg-white border border-gray-200',

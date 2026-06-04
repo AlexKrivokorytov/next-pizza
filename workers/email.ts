@@ -6,7 +6,7 @@ import { render } from '@react-email/render';
 import React from 'react';
 import { prisma } from '../prisma/prisma-client';
 import { OrderReceiptEmail } from '../emails/order-receipt';
-import type { OrderReceiptJobData } from '../lib/queues';
+import type { EmailJobData } from '../lib/queues';
 
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 const QUEUE_NAME = 'email';
@@ -56,6 +56,26 @@ async function sendOrderReceiptEmail(
   console.log(`[Worker] 🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
 }
 
+async function sendProfileUpdateEmail(
+  email: string,
+  fullName: string,
+  transporter: nodemailer.Transporter,
+): Promise<void> {
+  const info = await transporter.sendMail({
+    from: '"Next Pizza" <info@nextpizza.com>',
+    to: email,
+    subject: `Profile Updated Successfully`,
+    html: `<div>
+      <h1>Hello, ${fullName}!</h1>
+      <p>Your Next Pizza profile details were successfully updated.</p>
+      <p>If you did not make these changes, please contact support immediately.</p>
+    </div>`,
+  });
+
+  console.log(`[Worker] ✅ Profile update email sent to ${email}`);
+  console.log(`[Worker] 🔗 Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+}
+
 async function main(): Promise<void> {
   console.log('[Worker] Starting BullMQ email worker...');
 
@@ -74,13 +94,15 @@ async function main(): Promise<void> {
   console.log(`[Worker] Ethereal account ready: ${testAccount.user}`);
 
   // BullMQ worker uses the raw ioredis connection directly
-  const worker = new Worker<OrderReceiptJobData>(
+  const worker = new Worker<EmailJobData>(
     QUEUE_NAME,
     async (job) => {
       console.log(`[Worker] Processing job ${job.id}: ${JSON.stringify(job.data)}`);
 
       if (job.data.type === 'ORDER_RECEIPT') {
         await sendOrderReceiptEmail(job.data.orderId, transporter);
+      } else if (job.data.type === 'PROFILE_UPDATE') {
+        await sendProfileUpdateEmail(job.data.email, job.data.fullName, transporter);
       }
     },
     {

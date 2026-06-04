@@ -47,7 +47,7 @@ export const IngredientItem: React.FC<Props> = ({
       aria-label={`Select ${name} ingredient${active ? ' (selected)' : ''}`}
       className={cn(
         'flex items-center flex-col p-1 rounded-md w-full h-full text-center relative',
-        'min-w-[80px] min-h-[80px]',
+        'min-w-20 min-h-20',
         'cursor-pointer transition-all duration-200',
         isDarkPurple
           ? cn(
@@ -79,7 +79,7 @@ export const IngredientItem: React.FC<Props> = ({
           aria-hidden="true"
         />
       )}
-      <div className="relative w-[80px] h-[80px] sm:w-[110px] sm:h-[110px]">
+      <div className="relative w-20 h-20 sm:w-27.5 sm:h-27.5">
         <Image
           src={imageUrl}
           alt={`${name} ingredient`}

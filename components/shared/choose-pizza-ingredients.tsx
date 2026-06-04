@@ -33,8 +33,8 @@ export const ChoosePizzaIngredients: React.FC<ChoosePizzaIngredientsProps> = ({
       <div
         className={cn(
           'grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg',
-          'min-w-[250px] w-full',
-          'overflow-y-auto flex-grow',
+          'min-w-62.5 w-full',
+          'overflow-y-auto grow',
           'scrollbar',
           isDarkPurple ? 'bg-muted' : 'bg-white',
         )}
@@ -47,7 +47,7 @@ export const ChoosePizzaIngredients: React.FC<ChoosePizzaIngredientsProps> = ({
             price={ingredient.price}
             active={selectedIds.has(ingredient.id)}
             onClick={() => onClick(ingredient.id)}
-            className="min-w-[80px] min-h-[80px] w-full h-full"
+            className="min-w-20 min-h-20 w-full h-full"
           />
         ))}
       </div>

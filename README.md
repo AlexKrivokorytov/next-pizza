@@ -1,6 +1,6 @@
 # Next Pizza v2.0 🍕
 
-A full-stack pizza ordering platform built with modern web technologies, showcasing clean code architecture and advanced backend patterns.
+A premium full-stack pizza ordering platform built with modern web technologies. This project showcases **UI/UX Pro Max** aesthetics, **Clean Code** architecture, and **Node.js Backend Patterns** (OOP, Dependency Injection, Event Queues).
 
 ![Pizza Showcase](./public/logo.png)
 
@@ -10,8 +10,9 @@ A full-stack pizza ordering platform built with modern web technologies, showcas
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Database**: PostgreSQL with [Prisma ORM v7](https://www.prisma.io/) + `@prisma/adapter-pg`
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/) (Styled with UI/UX Pro Max tokens)
 - **State Management**: [Zustand](https://zustand-demo.pmnd.rs/)
+- **Message Broker**: [RabbitMQ](https://www.rabbitmq.com/) + [BullMQ](https://docs.bullmq.io/)
 - **Authentication**: [NextAuth.js](https://next-auth.js.org/)
 - **Validation**: [Zod](https://zod.dev/)
 
@@ -24,7 +25,8 @@ A full-stack pizza ordering platform built with modern web technologies, showcas
 - **Shopping Cart**: Real-time cart updates and totals using Zustand.
 - **Secure Checkout**: Form validation with Zod and secure order placement.
 - **User Authentication**: Register and login securely using NextAuth.
-- **User Profile**: View past orders and manage account details.
+- **User Profile**: View past orders and manage account details, including delivery/payment defaults.
+- **Email Notifications**: Asynchronous background email delivery via RabbitMQ for profile updates and receipts.
 
 ## Architecture
 
@@ -33,8 +35,10 @@ graph TD;
     Client[Next.js Client Components] --> Server[Next.js Server Actions / API Routes]
     Server --> Auth[NextAuth.js]
     Server --> Validation[Zod Validation]
-    Validation --> DB_Layer[CategoryService / UsersService]
-    DB_Layer --> Prisma[Prisma v7 ORM]
+    Validation --> Service_Layer[UserService / EmailService / OrderService]
+    Service_Layer --> Prisma[Prisma v7 ORM]
+    Service_Layer -.-> Queue[(RabbitMQ / BullMQ)]
+    Queue --> Worker[Email Background Worker]
     Prisma --> PG[(PostgreSQL)]
 ```
 
@@ -46,14 +50,18 @@ graph TD;
 
 ### 1. Run with Docker Compose (Recommended)
 
-The easiest way to get the app running, including the database and seed data.
+The easiest way to get the app running, including the database, RabbitMQ, and seed data.
 
 ```bash
 docker-compose up -d --build
 ```
 This will start:
-- Next.js Web App at `http://localhost:3000`
-- PostgreSQL Database at `localhost:5433`
+- **Web App**: `http://localhost:3000`
+- **PostgreSQL Database**: `localhost:5433`
+- **RabbitMQ**: `localhost:5672`
+- **Redis (for BullMQ)**: `localhost:6379`
+- **Meilisearch**: `localhost:7700`
+- **Background Worker**: Node.js worker consuming queue jobs.
 
 ### 2. Local Development
 
@@ -65,7 +73,7 @@ This will start:
 2. Copy environment file:
    ```bash
    cp .env.example .env
-   # Make sure DATABASE_URL points to postgresql://postgres:postgres@localhost:5433/next-pizza?schema=public
+   # Make sure DATABASE_URL, REDIS_URL, etc., are properly set.
    ```
 
 3. Generate Prisma Client & Push Schema:
@@ -84,9 +92,15 @@ This will start:
    npm run dev
    ```
 
+6. Start Background Worker:
+   ```bash
+   npm run worker
+   ```
+
 ## Design Patterns
 
-- **Clean Code**: Components are decoupled, and functions follow SRP (Single Responsibility Principle). Max component size kept small via decomposition.
+- **Clean Code & OOP**: All complex business logic is encapsulated in strongly-typed classes (e.g., `UserService`, `EmailService`) inside `lib/services/`.
+- **Background Jobs**: Heavy tasks like sending emails are offloaded to BullMQ/RabbitMQ to guarantee fast API responses.
 - **Centralized Providers**: All context providers grouped in `providers/index.tsx`.
 - **API Error Handling**: Uses a robust higher-order `withApiHandler` wrapper in `lib/api-handler.ts`.
 - **Driver Adapters**: Utilizing Prisma's newer `@prisma/adapter-pg` pattern for serverless edge compatibility.

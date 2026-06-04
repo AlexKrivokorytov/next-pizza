@@ -41,7 +41,7 @@ export default function AdminOrdersLoading() {
                         <Skeleton className="h-3 w-24" />
                       </td>
                       <td className="p-4"><Skeleton className="h-5 w-16" /></td>
-                      <td className="p-4 w-[200px]">
+                      <td className="p-4 w-50">
                         <Skeleton className="h-10 w-full rounded-md" />
                       </td>
                     </tr>

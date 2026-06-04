@@ -66,9 +66,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <div className={className}>
       <Link href={`/product/${id}`}>
-        <div className="flex justify-center p-6 bg-secondary rounded-lg h-[260px]">
+        <div className="flex justify-center p-6 bg-secondary rounded-lg h-65">
           <Image
-            className="w-[215px] h-[215px] object-cover"
+            className="w-53.75 h-53.75 object-cover"
             src={imageUrl}
             alt={name}
             width={215}
@@ -87,12 +87,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         
         {/* Ingredient Object Pills with Mini Images (Add-ons) */}
         {ingredients && ingredients.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-2 max-h-[72px] overflow-hidden">
+          <div className="flex flex-wrap gap-1.5 mt-2 max-h-18 overflow-hidden">
             {ingredients.slice(0, 3).map((ingredient) => (
               <div
                 key={ingredient.id}
                 className={cn(
-                  'flex items-center gap-1 px-2 py-0.5 rounded-full border text-[11px] font-medium',
+                  'flex items-center gap-1 px-2 py-0.5 rounded-full border text-2.75 font-medium',
                   isDarkPurple
                     ? 'bg-secondary/40 border-gray-700 text-gray-300'
                     : 'bg-gray-100 border-gray-200 text-gray-600',
@@ -110,7 +110,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             {ingredients.length > 3 && (
               <div
                 className={cn(
-                  'flex items-center gap-1 px-2 py-0.5 rounded-full border text-[11px] font-medium',
+                  'flex items-center gap-1 px-2 py-0.5 rounded-full border text-2.75 font-medium',
                   isDarkPurple
                     ? 'bg-secondary/40 border-gray-700 text-gray-300'
                     : 'bg-gray-100 border-gray-200 text-gray-600',
@@ -123,7 +123,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         )}
 
         <div className="flex justify-between items-center mt-4">
-          <span className="text-[20px]">
+          <span className="text-5">
             from <b>{price} $</b>
           </span>
           <Button variant="secondary" onClick={handleAddToCart}>

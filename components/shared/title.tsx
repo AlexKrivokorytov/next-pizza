@@ -29,12 +29,12 @@ export const Title: React.FC<Props> = ({ text, size = 'sm', className }) => {
   } as const;
 
   const mapClassNameBySize = {
-    xs: 'text-[16px] ',
-    sm: 'text-[22px] ',
-    md: 'text-[26px] ',
-    lg: 'text-[32px] ',
-    xl: 'text-[40px] ',
-    '2xl': 'text-[48px] ',
+    xs: 'text-4 ',
+    sm: 'text-5.5 ',
+    md: 'text-6.5 ',
+    lg: 'text-8 ',
+    xl: 'text-10 ',
+    '2xl': 'text-12 ',
   } as const;
 
   return React.createElement(

@@ -14,5 +14,5 @@ interface Props {
  * @returns A div wrapping the children with layout styles.
  */
 export const Container: React.FC<React.PropsWithChildren<Props>> = ({ className, children }) => {
-  return <div className={cn('mx-auto max-w-[1280px]', className)}>{children}</div>;
+  return <div className={cn('mx-auto max-w-320', className)}>{children}</div>;
 };

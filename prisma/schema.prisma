@@ -18,12 +18,22 @@ model User {
   provider   String?
   providerId String?
 
+  address    String?
+  phone      String?
+  defaultPaymentMethod PaymentMethod?
+  stripeCustomerId     String?
+
   cart             Cart?
   orders           Order[]
   verificationCode VerificationCode?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum PaymentMethod {
+  CARD
+  CASH
 }
 
 model Category {

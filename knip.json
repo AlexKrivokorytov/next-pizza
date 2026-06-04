@@ -1,18 +1,11 @@
 {
-  "$schema": "https://unpkg.com/knip@3/schema.json",
-  "ignoreExportsUsedInFile": true,
-  "ignoreDependencies": [
-    "postcss-load-config"
+  "ignore": [
+    "prisma/schema.prisma",
+    "eslint.config.mjs",
+    "providers/session-provider.tsx"
   ],
-  "next": {
-    "entry": [
-      "app/**/page.{js,jsx,ts,tsx}",
-      "app/**/layout.{js,jsx,ts,tsx}",
-      "app/**/loading.{js,jsx,ts,tsx}",
-      "app/**/error.{js,jsx,ts,tsx}",
-      "app/**/not-found.{js,jsx,ts,tsx}",
-      "app/api/**/route.{js,ts}",
-      "shared/components/ui/index.ts"
-    ]
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true
   }
 }

@@ -1,4 +1,7 @@
-FROM node:22-alpine
+FROM node:lts-alpine AS base
+
+# Upgrade packages to patch vulnerabilities
+RUN apk update && apk upgrade --no-cache
 
 WORKDIR /app
 

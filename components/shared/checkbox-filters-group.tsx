@@ -65,9 +65,9 @@ export const CheckboxFiltersGroup: React.FC<CheckboxFiltersGroupProps> = ({
         <p className="font-bold mb-3">{title}</p>
         <div className="space-y-3">
           {Array.from({ length: limit }).map((_, i) => (
-            <Skeleton key={i} className="h-6 mb-4 rounded-[8px] bg-gray-300" />
+            <Skeleton key={i} className="h-6 mb-4 rounded-2 bg-gray-300" />
           ))}
-          <Skeleton className="w-28 h-6 mb-4 rounded-[8px] bg-gray-300" />
+          <Skeleton className="w-28 h-6 mb-4 rounded-2 bg-gray-300" />
         </div>
       </div>
     );
@@ -90,7 +90,7 @@ export const CheckboxFiltersGroup: React.FC<CheckboxFiltersGroupProps> = ({
         </div>
       )}
 
-      <div className={`flex flex-col gap-4 ${showAll ? 'max-h-[260px] overflow-y-auto pr-1 scrollbar' : ''}`}>
+      <div className={`flex flex-col gap-4 ${showAll ? 'max-h-65 overflow-y-auto pr-1 scrollbar' : ''}`}>
         {list.map((item, index) => (
           <FilterCheckbox
             key={index}
