@@ -14,8 +14,8 @@ interface FiltersProps {
   className?: string;
 }
 
-const CategoryVariantsFilter = ({ activeCategoryId, filters }: { activeCategoryId: number; filters: ReturnProps }) => {
-  if (activeCategoryId === 1) {
+const CategoryVariantsFilter = ({ categoryName, filters }: { categoryName?: string; filters: ReturnProps }) => {
+  if (categoryName === 'Pizzas') {
     return (
       <>
         <CheckboxFiltersGroup
@@ -45,7 +45,7 @@ const CategoryVariantsFilter = ({ activeCategoryId, filters }: { activeCategoryI
     );
   }
 
-  if (activeCategoryId === 3) {
+  if (categoryName === 'Snacks') {
     return (
       <CheckboxFiltersGroup
         title="Portions"
@@ -62,7 +62,7 @@ const CategoryVariantsFilter = ({ activeCategoryId, filters }: { activeCategoryI
     );
   }
 
-  if (activeCategoryId === 4) {
+  if (categoryName === 'Cocktails') {
     return (
       <CheckboxFiltersGroup
         title="Volumes"
@@ -78,7 +78,7 @@ const CategoryVariantsFilter = ({ activeCategoryId, filters }: { activeCategoryI
     );
   }
 
-  if (activeCategoryId === 5 || activeCategoryId === 2) {
+  if (categoryName === 'Drinks' || categoryName === 'Breakfast') {
     return (
       <CheckboxFiltersGroup
         title="Volumes"
@@ -155,19 +155,31 @@ const PriceRangeFilter = ({ filters, isDarkPurple }: { filters: ReturnProps; isD
   );
 };
 
+import { categories as defaultCategories } from '@/prisma/constants';
+
+interface FiltersProps {
+  className?: string;
+  categories?: any[]; // We receive the categories from the page to map activeCategoryId to name
+}
+
 /**
  * Renders the pizza filters panel with types, sizes, price range, and ingredients.
  *
  * @param className - Additional class names for the filters panel.
+ * @param categories - Array of categories.
  *
  * @returns A filter section with checkboxes, range slider, and input fields.
  */
-export const Filters: React.FC<FiltersProps> = ({ className }) => {
+export const Filters: React.FC<FiltersProps> = ({ className, categories }) => {
   const { ingredients, loading } = useIngredients();
   const filters = useFilters();
   const { theme } = useTheme();
   const isDarkPurple = theme === 'dark-purple';
   const activeCategoryId = useCategoryStore((state) => state.activeId);
+  
+  // Use passed categories or fallback to constants (where id = index + 1)
+  const sourceCategories = categories || defaultCategories.map((c, i) => ({ id: i + 1, ...c }));
+  const activeCategoryName = sourceCategories.find((c) => c.id === activeCategoryId)?.name;
 
   // Use the query filters hook to handle URL updates
   useQueryFilters(filters);
@@ -188,7 +200,7 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
     >
       <Title text="Filtering" size="sm" className="mb-5 font-bold" />
 
-      <CategoryVariantsFilter activeCategoryId={activeCategoryId} filters={filters} />
+      <CategoryVariantsFilter categoryName={activeCategoryName} filters={filters} />
       
       <PriceRangeFilter filters={filters} isDarkPurple={isDarkPurple} />
 

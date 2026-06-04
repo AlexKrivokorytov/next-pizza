@@ -1,18 +1,14 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
-import { rule } from 'postcss';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+import nextConfig from 'eslint-config-next';
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript', {
-    rules: { '@next/next/no-img-element': 'off' },
-  }),
+  ...nextConfig,
+  {
+    rules: {
+      '@next/next/no-img-element': 'off',
+      'react-hooks/set-state-in-effect': 'off',
+      'react/no-unescaped-entities': 'off',
+    },
+  },
 ];
+
 export default eslintConfig;

@@ -28,6 +28,7 @@ export async function GET(req: NextRequest) {
   const encoder = new TextEncoder();
   let lastStatus = '';
   let intervalId: ReturnType<typeof setInterval>;
+  let timeoutId: ReturnType<typeof setTimeout>;
 
   const stream = new ReadableStream({
     start(controller) {
@@ -39,6 +40,13 @@ export async function GET(req: NextRequest) {
       // Send initial connection confirmation
       sendEvent({ type: 'connected', orderId: Number(orderId) });
 
+      // Close the connection after 10 minutes to prevent resource leaks
+      timeoutId = setTimeout(() => {
+        sendEvent({ type: 'error', message: 'Connection timed out' });
+        clearInterval(intervalId);
+        controller.close();
+      }, 10 * 60 * 1000);
+
       intervalId = setInterval(async () => {
         try {
           const order = await prisma.order.findUnique({
@@ -49,6 +57,7 @@ export async function GET(req: NextRequest) {
           if (!order) {
             sendEvent({ type: 'error', message: 'Order not found' });
             clearInterval(intervalId);
+            clearTimeout(timeoutId);
             controller.close();
             return;
           }
@@ -61,6 +70,7 @@ export async function GET(req: NextRequest) {
             // Auto-close when order reaches a terminal state
             if (order.status === 'SUCCEEDED' || order.status === 'CANCELED') {
               clearInterval(intervalId);
+              clearTimeout(timeoutId);
               controller.close();
             }
           }
@@ -68,12 +78,14 @@ export async function GET(req: NextRequest) {
           console.error('[SSE] Error polling order:', err);
           sendEvent({ type: 'error', message: 'Internal error' });
           clearInterval(intervalId);
+          clearTimeout(timeoutId);
           controller.close();
         }
       }, POLL_INTERVAL_MS);
     },
     cancel() {
       clearInterval(intervalId);
+      clearTimeout(timeoutId);
     },
   });
 

@@ -52,7 +52,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     e.stopPropagation();
 
     addItem({
-      id: Date.now(), 
+      id: crypto.randomUUID(), 
       productItemId: productItemId || Number(id) || 0,
       name,
       imageUrl,

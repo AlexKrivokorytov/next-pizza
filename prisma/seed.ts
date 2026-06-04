@@ -41,6 +41,13 @@ async function up() {
         verified: new Date(Date.now()),
         role: 'ADMIN',
       },
+      {
+        fullName: 'QuasarDev',
+        email: 'admin@quasardev.com',
+        password: hashSync('qwe22222', 10),
+        verified: new Date(Date.now()),
+        role: 'ADMIN',
+      },
     ],
   });
 
@@ -149,6 +156,11 @@ async function up() {
         userId: 2,
         totalAmount: 0,
         token: '22222',
+      },
+      {
+        userId: 3,
+        totalAmount: 0,
+        token: '33333',
       },
     ],
   });

@@ -9,10 +9,20 @@ const createUserSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { ApiError } from '@/lib/api-handler';
+
 /**
  * Handles GET requests to fetch all users.
  */
 export const GET = withApiHandler(async () => {
+  const session = await getServerSession(authOptions);
+  
+  if (!session || session.user.role !== 'ADMIN') {
+    throw new ApiError('Unauthorized: Admin access required', 403);
+  }
+
   const users = await UsersService.getAll();
   return NextResponse.json(users || []);
 });

@@ -1,13 +1,25 @@
 import { prisma } from '@/prisma/prisma-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { UpdateStatusSelect } from './update-status-select';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
-export default async function AdminOrdersPage() {
-  const orders = await prisma.order.findMany({
-    orderBy: {
-      id: 'desc',
-    },
-  });
+export default async function AdminOrdersPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const params = await searchParams;
+  const page = Number(params.page) || 1;
+  const take = 10;
+  const skip = (page - 1) * take;
+
+  const [orders, totalOrders] = await Promise.all([
+    prisma.order.findMany({
+      orderBy: { id: 'desc' },
+      skip,
+      take,
+    }),
+    prisma.order.count(),
+  ]);
+
+  const totalPages = Math.ceil(totalOrders / take);
 
   return (
     <div className="space-y-6">
@@ -18,7 +30,7 @@ export default async function AdminOrdersPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>All Orders ({orders.length})</CardTitle>
+          <CardTitle>All Orders ({totalOrders})</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border">
@@ -62,6 +74,21 @@ export default async function AdminOrdersPage() {
               </table>
             </div>
           </div>
+          
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-end space-x-2 py-4">
+              <Button variant="outline" size="sm" disabled={page <= 1} asChild={page > 1}>
+                {page > 1 ? <Link href={`?page=${page - 1}`}>Previous</Link> : <span>Previous</span>}
+              </Button>
+              <div className="text-sm font-medium">
+                Page {page} of {totalPages}
+              </div>
+              <Button variant="outline" size="sm" disabled={page >= totalPages} asChild={page < totalPages}>
+                {page < totalPages ? <Link href={`?page=${page + 1}`}>Next</Link> : <span>Next</span>}
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

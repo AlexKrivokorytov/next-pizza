@@ -7,7 +7,7 @@ import { Search, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { useClickAway } from 'react-use';
+import { useClickAway } from '@/hooks/use-click-away';
 import { useDebouncedCallback } from 'use-debounce';
 import { useTheme } from '@/providers/theme-provider';
 

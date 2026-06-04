@@ -5,38 +5,45 @@ import { useCartStore } from '@/store/cart';
 import { calcTotalPizzaPrice } from '@/lib';
 import { ChoosePizzaForm } from './choose-pizza-form';
 import { ChooseProductForm } from './choose-product-form';
+import { Ingredient, Product, ProductItem } from '@prisma/client';
+
+export type ProductWithRelations = Product & { items: ProductItem[]; ingredients: Ingredient[] };
 
 interface ProductFormProps {
-  product: any;
+  product: ProductWithRelations;
   onSubmit?: () => void;
   className?: string;
 }
 
 export const ProductForm: React.FC<ProductFormProps> = ({ product, onSubmit, className }) => {
   const { addItem } = useCartStore();
-  const isPizzaForm = Boolean(product.items[0].pizzaType);
+  const isPizzaForm = Boolean(product.items[0]?.pizzaType);
 
   const onSubmitPizza = (itemId: number, ingredientIds: number[]) => {
-    const itemInfo = product.items.find((i: any) => i.id === itemId);
-    const selectedIngredients = product.ingredients.filter((i: any) => ingredientIds.includes(i.id));
+    const itemInfo = product.items.find((i: ProductItem) => i.id === itemId);
+    if (!itemInfo) return;
+    
+    const selectedIngredients = product.ingredients.filter((i: Ingredient) => ingredientIds.includes(i.id));
     const price = calcTotalPizzaPrice(itemInfo, new Set(ingredientIds), product.ingredients);
     
     addItem({
-      id: Date.now(),
+      id: crypto.randomUUID(),
       productItemId: itemId,
       name: product.name,
       imageUrl: product.imageUrl,
       price,
       quantity: 1,
-      ingredients: selectedIngredients.map((i: any) => ({ id: i.id, name: i.name, price: i.price }))
+      ingredients: selectedIngredients.map((i: Ingredient) => ({ id: i.id, name: i.name, price: i.price }))
     });
     onSubmit?.();
   };
 
   const onSubmitProduct = (itemId: number) => {
-    const itemInfo = product.items.find((i: any) => i.id === itemId);
+    const itemInfo = product.items.find((i: ProductItem) => i.id === itemId);
+    if (!itemInfo) return;
+
     addItem({
-      id: Date.now(),
+      id: crypto.randomUUID(),
       productItemId: itemId,
       name: product.name,
       imageUrl: product.imageUrl,

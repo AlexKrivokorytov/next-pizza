@@ -4,13 +4,13 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json* ./
-# Install all dependencies (including dev for tsx)
 RUN npm install
+
+# Copy prisma schema and generate client
+COPY prisma ./prisma
+RUN npx prisma generate
 
 # Copy source code
 COPY . .
 
-# Generate Prisma Client
-RUN npx prisma generate
-
-CMD ["npm", "run", "worker"]
+CMD ["npx", "tsx", "workers/email.ts"]

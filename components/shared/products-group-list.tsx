@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useIntersection } from 'react-use';
+import { useIntersection } from '@/hooks/use-intersection';
 import { ShoppingBag } from 'lucide-react';
 import { Title } from './title';
 import { cn } from '../../lib/utils';

@@ -1,5 +1,5 @@
 import { useSearchParams } from 'next/navigation';
-import { useSet } from 'react-use';
+import { useSet } from './use-set';
 import React from 'react';
 import qs from 'qs';
 import { useRouter } from 'next/navigation';
@@ -62,6 +62,8 @@ export const useFilters = (): ReturnProps => {
     priceTo: Number(searchParams.get('priceTo')) || undefined,
   });
 
+  const isFirstRender = React.useRef(true);
+
   // Hydrate from localStorage on mount if searchParams is empty
   React.useEffect(() => {
     // If there are searchParams, the user came from a shared link or already has active filters.
@@ -86,6 +88,11 @@ export const useFilters = (): ReturnProps => {
 
   // Save to localStorage when filters change
   React.useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    
     const filtersToSave = {
       ingredients: Array.from(selectedIngredients),
       sizes: Array.from(sizes),

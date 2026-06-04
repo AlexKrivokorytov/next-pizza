@@ -8,7 +8,7 @@ import { SyncSearchButton } from './sync-search-button';
  * Aggregates order data into daily revenue buckets for the last 14 days.
  */
 function buildDailyRevenue(
-  orders: Array<{ totalAmount: number; status: string; id: number }>,
+  orders: Array<{ totalAmount: number; status: string; id: number; createdAt: Date }>,
 ): Array<{ date: string; revenue: number; orders: number }> {
   const days = 14;
   const map = new Map<string, { revenue: number; orders: number }>();
@@ -20,16 +20,17 @@ function buildDailyRevenue(
     map.set(key, { revenue: 0, orders: 0 });
   }
 
-  // Distribute succeeded orders evenly across days for demo (real: use order.createdAt)
   const succeeded = orders.filter((o) => o.status === 'SUCCEEDED');
-  const keys = [...map.keys()];
-  succeeded.forEach((order, idx) => {
-    const key = keys[idx % keys.length];
-    const existing = map.get(key)!;
-    map.set(key, {
-      revenue: existing.revenue + order.totalAmount,
-      orders: existing.orders + 1,
-    });
+  succeeded.forEach((order) => {
+    const d = new Date(order.createdAt);
+    const key = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    if (map.has(key)) {
+      const existing = map.get(key)!;
+      map.set(key, {
+        revenue: existing.revenue + order.totalAmount,
+        orders: existing.orders + 1,
+      });
+    }
   });
 
   return [...map.entries()].map(([date, v]) => ({
@@ -44,7 +45,7 @@ export default async function AdminDashboardPage() {
     prisma.user.count(),
     prisma.product.count(),
     prisma.order.findMany({
-      select: { id: true, fullName: true, totalAmount: true, status: true, email: true },
+      select: { id: true, fullName: true, totalAmount: true, status: true, email: true, createdAt: true },
       orderBy: { id: 'desc' },
     }),
   ]);

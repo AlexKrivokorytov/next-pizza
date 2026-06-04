@@ -1,4 +1,5 @@
 import { prisma } from '@/prisma/prisma-client';
+import { Prisma } from '@prisma/client';
 
 export interface CategorySearchParams {
   priceFrom?: number;
@@ -24,7 +25,7 @@ export class CategoryService {
       ...(priceTo !== undefined && { lte: priceTo }),
     };
 
-    const itemsFilter: any = {
+    const itemsFilter: Prisma.ProductItemWhereInput = {
       ...(Object.keys(priceFilter).length > 0 && { price: priceFilter }),
     };
 

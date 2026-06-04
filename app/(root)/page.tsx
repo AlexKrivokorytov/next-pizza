@@ -15,16 +15,7 @@ interface SearchParams {
   sortBy?: string;
 }
 
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { redirect } from 'next/navigation';
-
 export default async function Home({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  const session = await getServerSession(authOptions);
-  
-  if (!session) {
-    redirect('?auth=login'); // Triggers login modal in header
-  }
   const params = await searchParams;
 
   const priceFrom = params.priceFrom && !isNaN(Number(params.priceFrom)) ? Number(params.priceFrom) : undefined;
@@ -56,7 +47,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-[80px]">
           {/* Filters Sidebar - Hidden on screens smaller than lg */}
           <div className="hidden lg:block lg:w-[250px] lg:sticky lg:top-[100px] lg:self-start lg:max-h-[calc(100vh-100px)] lg:overflow-y-auto lg:scrollbar">
-            <Filters />
+            <Filters categories={categoriesWithProducts} />
           </div>
 
           {/* Products List */}

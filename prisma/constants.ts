@@ -353,5 +353,37 @@ export const pizzasData = [
     description: 'Spicy chorizo, pickled cucumbers, red onion, fresh tomatoes, mustard sauce, mozzarella',
     baseIngredientIds: ing(['Chorizo', 'Pickled cucumbers', 'Red onion', 'Fresh tomatoes', 'Mozzarella']),
     addOnIds: ing(['Ham', 'Meatballs', 'Jalapeno pepper']),
+  },
+  {
+    name: 'Arriva',
+    imageUrl: '/pizzas/chorizo fresh.webp',
+    categoryId: 1,
+    description: 'Tender chicken, spicy chorizo, burger sauce, sweet pepper, red onion, tomatoes, mozzarella',
+    baseIngredientIds: ing(['Tender chicken', 'Chorizo', 'Sweet pepper', 'Red onion', 'Fresh tomatoes', 'Mozzarella']),
+    addOnIds: ing(['Cheese crust', 'Jalapeno pepper', 'Mushrooms']),
+  },
+  {
+    name: 'Dodo Mix',
+    imageUrl: '/pizzas/pepperoni_fresh.avif',
+    categoryId: 1,
+    description: 'Bacon, tender chicken, ham, mozzarella, tomatoes, red onion, garlic sauce',
+    baseIngredientIds: ing(['Tender chicken', 'Ham', 'Mozzarella', 'Fresh tomatoes', 'Red onion']),
+    addOnIds: ing(['Cheese crust', 'Chorizo', 'Pepperoni']),
+  },
+  {
+    name: 'Pesto',
+    imageUrl: '/pizzas/hypnotica.png',
+    categoryId: 1,
+    description: 'Tender chicken, pesto sauce, bryndza, tomatoes, mozzarella',
+    baseIngredientIds: ing(['Tender chicken', 'Bryndza cheese', 'Fresh tomatoes', 'Mozzarella']),
+    addOnIds: ing(['Cheese crust', 'Mushrooms', 'Red onion']),
+  },
+  {
+    name: 'Four Seasons',
+    imageUrl: '/pizzas/cheese.webp',
+    categoryId: 1,
+    description: 'Meatballs, pepperoni, tomatoes, mushrooms, mozzarella, tomato sauce',
+    baseIngredientIds: ing(['Meatballs', 'Pepperoni', 'Fresh tomatoes', 'Mushrooms', 'Mozzarella']),
+    addOnIds: ing(['Cheese crust', 'Jalapeno pepper', 'Red onion']),
   }
 ];

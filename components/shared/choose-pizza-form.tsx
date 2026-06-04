@@ -7,7 +7,7 @@ import { Button } from '../ui';
 import { GroupVariants } from './group-variants';
 import { IngredientItem } from './ingredient-item';
 import { useTheme } from '@/providers/theme-provider';
-import { useSet } from 'react-use';
+import { useSet } from '@/hooks/use-set';
 import { PizzaSize, pizzaSizes, PizzaType, mapPizzaType, pizzaTypes } from '../../constants/pizza';
 import { Ingredient, ProductItem } from '@prisma/client';
 import { calcTotalPizzaPrice } from '../../lib';

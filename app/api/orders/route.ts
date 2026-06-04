@@ -6,6 +6,16 @@ import { randomUUID } from 'crypto';
 import { z } from 'zod';
 import { stripe } from '@/lib/stripe';
 
+interface CartItemPayload {
+  id: string;
+  name?: string;
+  imageUrl?: string;
+  price: number;
+  quantity: number;
+  productItemId?: number;
+  ingredients?: Array<{ id: number; name: string; price: number }>;
+}
+
 const checkoutSchema = z.object({
   fullName: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
@@ -13,7 +23,7 @@ const checkoutSchema = z.object({
   address: z.string().min(5, 'Address must be at least 5 characters'),
   comment: z.string().optional(),
   totalAmount: z.number().positive('Total amount must be greater than zero'),
-  items: z.array(z.any()).min(1, 'Cart cannot be empty'),
+  items: z.custom<CartItemPayload[]>().refine((val) => Array.isArray(val) && val.length > 0, 'Cart cannot be empty'),
 });
 
 export async function POST(req: NextRequest) {
@@ -65,7 +75,7 @@ export async function POST(req: NextRequest) {
       metadata: {
         orderId: order.id.toString(),
       },
-      line_items: data.items.map((item: any) => ({
+      line_items: data.items.map((item: CartItemPayload) => ({
         price_data: {
           currency: 'usd',
           product_data: {
