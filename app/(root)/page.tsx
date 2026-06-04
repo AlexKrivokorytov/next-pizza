@@ -15,7 +15,16 @@ interface SearchParams {
   sortBy?: string;
 }
 
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+
 export default async function Home({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const session = await getServerSession(authOptions);
+  
+  if (!session) {
+    redirect('?auth=login'); // Triggers login modal in header
+  }
   const params = await searchParams;
 
   const priceFrom = params.priceFrom && !isNaN(Number(params.priceFrom)) ? Number(params.priceFrom) : undefined;

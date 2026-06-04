@@ -102,6 +102,15 @@ body {
 /* =========================================================
    Custom scrollbar
    ========================================================= */
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+.dark-purple .scrollbar {
+  scrollbar-color: hsl(270 10% 25%) transparent;
+}
+
 .scrollbar::-webkit-scrollbar {
   width: 6px;
 }

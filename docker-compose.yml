@@ -12,6 +12,43 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.7
+    restart: always
+    ports:
+      - "7700:7700"
+    environment:
+      - MEILI_MASTER_KEY=nextpizza-meili-key
+      - MEILI_ENV=development
+    volumes:
+      - meilisearch_data:/meili_data
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
   app:
     build:
       context: .
@@ -21,8 +58,37 @@ services:
       - "3000:3000"
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/next_pizza?schema=public
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - REDIS_URL=redis://redis:6379
+      - MEILISEARCH_HOST=http://meilisearch:7700
+      - MEILISEARCH_KEY=nextpizza-meili-key
+      - NEXTAUTH_SECRET=9214713824971241924194
+      - NEXTAUTH_URL=http://localhost:3000
     depends_on:
       - db
+      - rabbitmq
+      - redis
+      - meilisearch
+
+  worker:
+    build:
+      context: .
+      dockerfile: worker.Dockerfile
+    command: npm run worker
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/next_pizza?schema=public
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      db:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
 volumes:
   postgres_data:
+  redis_data:
+  meilisearch_data:

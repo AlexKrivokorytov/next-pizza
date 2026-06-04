@@ -24,64 +24,44 @@ export class CategoryService {
       ...(priceTo !== undefined && { lte: priceTo }),
     };
 
-    const pizzaSizes = sizesArr?.filter(s => [20, 30, 40].includes(s));
-    const snackSizes = sizesArr?.filter(s => [6, 9, 12].includes(s));
-    const drinkSizes = sizesArr?.filter(s => [300, 400, 500].includes(s));
+    const itemsFilter: any = {
+      ...(Object.keys(priceFilter).length > 0 && { price: priceFilter }),
+    };
+
+    if (sizesArr && sizesArr.length > 0) {
+      itemsFilter.size = { in: sizesArr };
+    }
+
+    if (pizzaTypesArr && pizzaTypesArr.length > 0) {
+      itemsFilter.pizzaType = { in: pizzaTypesArr };
+    }
 
     const categories = await prisma.category.findMany({
       include: {
         products: {
           where: {
-            ingredients: ingredientsArr
-              ? {
-                  some: {
-                    id: {
-                      in: ingredientsArr,
+            AND: [
+              ...(ingredientsArr && ingredientsArr.length > 0
+                ? [
+                    {
+                      baseIngredients: {
+                        some: {
+                          id: { in: ingredientsArr },
+                        },
+                      },
                     },
-                  },
-                }
-              : undefined,
-            OR: [
+                  ]
+                : []),
               {
-                categoryId: 1, // Pizzas
                 items: {
-                  some: {
-                    ...(Object.keys(priceFilter).length > 0 && { price: priceFilter }),
-                    ...(pizzaSizes && pizzaSizes.length > 0 && { size: { in: pizzaSizes } }),
-                    ...(pizzaTypesArr && { pizzaType: { in: pizzaTypesArr } }),
-                  },
-                },
-              },
-              {
-                categoryId: 3, // Snacks
-                items: {
-                  some: {
-                    ...(Object.keys(priceFilter).length > 0 && { price: priceFilter }),
-                    ...(snackSizes && snackSizes.length > 0 && { size: { in: snackSizes } }),
-                  },
-                },
-              },
-              {
-                categoryId: { in: [2, 4, 5] }, // Drinks & Cocktails
-                items: {
-                  some: {
-                    ...(Object.keys(priceFilter).length > 0 && { price: priceFilter }),
-                    ...(drinkSizes && drinkSizes.length > 0 && { size: { in: drinkSizes } }),
-                  },
-                },
-              },
-              {
-                categoryId: { notIn: [1, 2, 3, 4, 5] }, // Fallback
-                items: {
-                  some: {
-                    ...(Object.keys(priceFilter).length > 0 && { price: priceFilter }),
-                  },
+                  some: itemsFilter,
                 },
               },
             ],
           },
           include: {
             ingredients: true,
+            baseIngredients: true,
             items: {
               orderBy: {
                 price: 'asc',

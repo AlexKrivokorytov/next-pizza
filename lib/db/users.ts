@@ -37,4 +37,16 @@ export class UsersService {
       where: { email },
     });
   }
+
+  /**
+   * Finds a user by ID.
+   * 
+   * @param id User ID
+   * @returns User or null
+   */
+  static async findById(id: number): Promise<User | null> {
+    return prisma.user.findFirst({
+      where: { id },
+    });
+  }
 }

@@ -29,6 +29,7 @@ export default function CheckoutPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -51,14 +52,31 @@ export default function CheckoutPage() {
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
+        if (data.errors) {
+          // Zod format: { fieldName: { _errors: ['message'] } }
+          const formattedErrors: Record<string, string[]> = {};
+          Object.keys(data.errors).forEach(key => {
+            if (key !== '_errors' && data.errors[key]._errors) {
+              formattedErrors[key] = data.errors[key]._errors;
+            }
+          });
+          setFieldErrors(formattedErrors);
+          throw new Error('Please check the form for errors');
+        }
         throw new Error(data.message || 'Failed to create order');
       }
 
       // Clear the cart on success
       clearCart();
-      router.push('/profile'); // Redirect to profile to see the order
+      
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        router.push('/profile'); // Fallback redirect
+      }
     } catch (err: any) {
       setError(err.message || 'Something went wrong');
     } finally {
@@ -103,9 +121,12 @@ export default function CheckoutPage() {
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    required
                     placeholder="John Doe"
+                    className={fieldErrors.fullName ? 'border-destructive' : ''}
                   />
+                  {fieldErrors.fullName && (
+                    <p className="text-xs text-destructive">{fieldErrors.fullName[0]}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="email" className="text-sm font-medium">Email</label>
@@ -115,9 +136,12 @@ export default function CheckoutPage() {
                     type="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    required
                     placeholder="john@example.com"
+                    className={fieldErrors.email ? 'border-destructive' : ''}
                   />
+                  {fieldErrors.email && (
+                    <p className="text-xs text-destructive">{fieldErrors.email[0]}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="phone" className="text-sm font-medium">Phone Number</label>
@@ -127,9 +151,12 @@ export default function CheckoutPage() {
                     type="tel"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    required
                     placeholder="+1 234 567 8900"
+                    className={fieldErrors.phone ? 'border-destructive' : ''}
                   />
+                  {fieldErrors.phone && (
+                    <p className="text-xs text-destructive">{fieldErrors.phone[0]}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="address" className="text-sm font-medium">Delivery Address</label>
@@ -138,9 +165,12 @@ export default function CheckoutPage() {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    required
                     placeholder="123 Main St, Apt 4B"
+                    className={fieldErrors.address ? 'border-destructive' : ''}
                   />
+                  {fieldErrors.address && (
+                    <p className="text-xs text-destructive">{fieldErrors.address[0]}</p>
+                  )}
                 </div>
               </div>
               <div className="space-y-2 pt-2">

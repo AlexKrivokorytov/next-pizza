@@ -5,6 +5,8 @@ import { z } from 'zod';
 import { withApiHandler } from '@/lib/api-handler';
 import { ApiError } from '@/lib/api-handler';
 
+import { rateLimit } from '@/lib/rate-limit';
+
 const registerSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
@@ -12,6 +14,13 @@ const registerSchema = z.object({
 });
 
 export const POST = withApiHandler(async (req: NextRequest) => {
+  const ip = req.headers.get('x-forwarded-for') || 'unknown';
+  const isAllowed = await rateLimit(`rate_limit:register:${ip}`, 5, 60 * 60); // 5 requests per hour
+
+  if (!isAllowed) {
+    throw new ApiError('Too many registration attempts. Please try again later.', 429);
+  }
+
   const body = await req.json();
   const data = registerSchema.parse(body);
 

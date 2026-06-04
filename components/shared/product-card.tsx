@@ -18,6 +18,7 @@ interface ProductCardProps {
   price: number;
   imageUrl: string;
   ingredients?: Ingredient[];
+  description?: string;
   className?: string;
 }
 
@@ -38,6 +39,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   price,
   imageUrl,
   ingredients,
+  description,
   className,
   productItemId,
 }) => {
@@ -76,7 +78,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
         <Title text={name} size="sm" className="mb-1 mt-3 font-bold" />
         
-        {/* Ingredient Object Pills with Mini Images */}
+        {/* Base Ingredients Description */}
+        {description && (
+          <p className="text-sm text-gray-400 mb-2 line-clamp-2">
+            {description}
+          </p>
+        )}
+        
+        {/* Ingredient Object Pills with Mini Images (Add-ons) */}
         {ingredients && ingredients.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-2 max-h-[72px] overflow-hidden">
             {ingredients.slice(0, 3).map((ingredient) => (

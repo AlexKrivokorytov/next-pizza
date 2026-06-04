@@ -41,8 +41,10 @@ model Product {
 
   name     String
   imageUrl String
+  description String
 
-  ingredients Ingredient[]
+  ingredients Ingredient[] @relation("AddOns")
+  baseIngredients Ingredient[] @relation("BaseIngredients")
   items       ProductItem[]
   category    Category      @relation(fields: [categoryId], references: [id])
   categoryId  Int
@@ -71,7 +73,8 @@ model Ingredient {
   price    Float
   imageUrl String
 
-  products  Product[]
+  products      Product[] @relation("AddOns")
+  baseProducts  Product[] @relation("BaseIngredients")
   cartItems CartItem[]
 
   createdAt DateTime @default(now())

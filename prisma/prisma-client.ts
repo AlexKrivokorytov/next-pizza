@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import 'dotenv/config';
 
 /**
  * Creates a PrismaClient instance using the @prisma/adapter-pg driver adapter.

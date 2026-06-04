@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { categories, ingredients, products } from './constants';
+import { categories, ingredients, products, pizzasData } from './constants';
 import { prisma } from './prisma-client';
 import { hashSync } from 'bcrypt';
 
@@ -43,6 +43,7 @@ async function up() {
       },
     ],
   });
+
   await prisma.category.createMany({
     data: categories,
   });
@@ -55,210 +56,86 @@ async function up() {
     data: products,
   });
 
-  const pizza1 = await prisma.product.create({
-    data: {
-      name: 'Fresh Pepperoni',
-      imageUrl: '/pizzas/pepperoni_fresh.avif',
-      categoryId: 1,
-      ingredients: {
-        connect: ingredients.slice(0, 5),
+  // Create pizzas
+  const createdPizzas = [];
+  for (const pizza of pizzasData) {
+    const createdPizza = await prisma.product.create({
+      data: {
+        name: pizza.name,
+        imageUrl: pizza.imageUrl,
+        categoryId: pizza.categoryId,
+        description: pizza.description,
+        baseIngredients: {
+          connect: pizza.baseIngredientIds.map((id) => ({ id })),
+        },
+        ingredients: {
+          connect: pizza.addOnIds.map((id) => ({ id })),
+        },
       },
-    },
-  });
+    });
+    createdPizzas.push(createdPizza);
+  }
 
-  const pizza2 = await prisma.product.create({
-    data: {
-      name: 'Cheese',
-      imageUrl: '/pizzas/cheese.webp',
-      categoryId: 1,
-      ingredients: {
-        connect: ingredients.slice(5, 10),
-      },
-    },
-  });
+  // Generate variants
+  const productItems: Prisma.ProductItemUncheckedCreateInput[] = [];
 
-  const pizza3 = await prisma.product.create({
-    data: {
-      name: 'Chorizo fresh',
-      imageUrl: '/pizzas/chorizo fresh.webp',
-      categoryId: 1,
-      ingredients: {
-        connect: ingredients.slice(10, 40),
-      },
-    },
-  });
+  // Generate variants for the 15 pizzas
+  for (const pizza of createdPizzas) {
+    productItems.push(generateProductItem({ productId: pizza.id, pizzaType: 1, size: 20 }));
+    productItems.push(generateProductItem({ productId: pizza.id, pizzaType: 1, size: 30 }));
+    productItems.push(generateProductItem({ productId: pizza.id, pizzaType: 1, size: 40 }));
+    productItems.push(generateProductItem({ productId: pizza.id, pizzaType: 2, size: 20 }));
+    productItems.push(generateProductItem({ productId: pizza.id, pizzaType: 2, size: 30 }));
+    productItems.push(generateProductItem({ productId: pizza.id, pizzaType: 2, size: 40 }));
+  }
 
-  const pizza4 = await prisma.product.create({
-    data: {
-      name: 'Margarita',
-      imageUrl: '/pizzas/cheese.webp',
-      categoryId: 1,
-      ingredients: {
-        connect: ingredients.slice(1, 3).concat(ingredients.slice(10, 11)), // Mozzarella, Cheddar, Fresh tomatoes
-      },
-    },
-  });
+  // Generate variants for other products (assuming they exist from the static products list)
+  // Let's assume the products from `products` start after the pizzas.
+  // Wait, the products created via createMany get IDs automatically. We don't have their exact IDs.
+  // However, since we TRUNCATE tables, `products` created via createMany will have IDs 1 to N,
+  // and then the pizzas will have IDs N+1 to N+15.
+  // Let's adjust this: products array has 17 items (drinks, snacks, etc). So IDs 1 to 17.
+  // Then pizzas will have IDs 18 to 32.
 
-  const pizza5 = await prisma.product.create({
-    data: {
-      name: 'Meat Overload',
-      imageUrl: '/pizzas/pepperoni_fresh.webp',
-      categoryId: 1,
-      ingredients: {
-        connect: ingredients.slice(6, 9).concat(ingredients.slice(16, 17)), // Ham, Pepperoni, Chorizo, Meatballs
-      },
-    },
-  });
-
-  const pizza6 = await prisma.product.create({
-    data: {
-      name: 'Hawaiian',
-      imageUrl: '/pizzas/hypnotica.png',
-      categoryId: 1,
-      ingredients: {
-        connect: ingredients.slice(6, 7).concat(ingredients.slice(12, 13)), // Ham, Pineapple
-      },
-    },
-  });
+  productItems.push(
+    generateProductItem({ productId: 1 }), // Omelet ham/mushrooms
+    generateProductItem({ productId: 2 }), // Omelet pepperoni
+    { productId: 3, price: 2.50, size: 300 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 3, price: 3.20, size: 400 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 3, price: 3.80, size: 500 } as Prisma.ProductItemUncheckedCreateInput,
+    generateProductItem({ productId: 4 }), // Denwich
+    { productId: 5, price: 3.50, size: 6 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 5, price: 4.80, size: 9 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 5, price: 5.90, size: 12 } as Prisma.ProductItemUncheckedCreateInput,
+    generateProductItem({ productId: 6 }), // Potatoes
+    generateProductItem({ productId: 7 }), // Dodster
+    generateProductItem({ productId: 8 }), // Spicy Dodster
+    { productId: 9, price: 2.90, size: 300 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 9, price: 3.90, size: 500 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 10, price: 2.90, size: 300 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 10, price: 3.90, size: 500 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 11, price: 3.20, size: 300 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 11, price: 4.20, size: 500 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 12, price: 2.70, size: 300 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 12, price: 3.70, size: 500 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 13, price: 2.80, size: 300 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 13, price: 3.50, size: 400 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 13, price: 4.10, size: 500 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 14, price: 2.80, size: 300 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 14, price: 3.50, size: 400 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 14, price: 4.10, size: 500 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 15, price: 2.90, size: 300 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 15, price: 3.60, size: 400 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 15, price: 4.20, size: 500 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 16, price: 1.90, size: 300 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 16, price: 2.50, size: 400 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 17, price: 2.50, size: 300 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 17, price: 3.20, size: 400 } as Prisma.ProductItemUncheckedCreateInput,
+    { productId: 17, price: 3.80, size: 500 } as Prisma.ProductItemUncheckedCreateInput
+  );
 
   await prisma.productItem.createMany({
-    data: [
-      // pizza "Pepperoni fresh"
-      generateProductItem({
-        productId: pizza1.id,
-        pizzaType: 1,
-        size: 20,
-      }),
-      generateProductItem({
-        productId: pizza1.id,
-        pizzaType: 2,
-        size: 30,
-      }),
-      generateProductItem({
-        productId: pizza1.id,
-        pizzaType: 2,
-        size: 40,
-      }),
-
-      // Pizza "Cheese"
-      generateProductItem({
-        productId: pizza2.id,
-        pizzaType: 1,
-        size: 20,
-      }),
-      generateProductItem({
-        productId: pizza2.id,
-        pizzaType: 1,
-        size: 30,
-      }),
-      generateProductItem({
-        productId: pizza2.id,
-        pizzaType: 1,
-        size: 40,
-      }),
-      generateProductItem({
-        productId: pizza2.id,
-        pizzaType: 2,
-        size: 20,
-      }),
-      generateProductItem({
-        productId: pizza2.id,
-        pizzaType: 2,
-        size: 30,
-      }),
-      generateProductItem({
-        productId: pizza2.id,
-        pizzaType: 2,
-        size: 40,
-      }),
-
-      // Pizza "Chorizo fresh"
-      generateProductItem({
-        productId: pizza3.id,
-        pizzaType: 1,
-        size: 20,
-      }),
-      generateProductItem({
-        productId: pizza3.id,
-        pizzaType: 2,
-        size: 30,
-      }),
-      generateProductItem({
-        productId: pizza3.id,
-        pizzaType: 2,
-        size: 40,
-      }),
-
-      // Pizza "Margarita"
-      generateProductItem({ productId: pizza4.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza4.id, pizzaType: 1, size: 30 }),
-      generateProductItem({ productId: pizza4.id, pizzaType: 2, size: 40 }),
-
-      // Pizza "Meat Overload"
-      generateProductItem({ productId: pizza5.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza5.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza5.id, pizzaType: 2, size: 40 }),
-
-      // Pizza "Hawaiian"
-      generateProductItem({ productId: pizza6.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza6.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza6.id, pizzaType: 2, size: 40 }),
-
-      // Other products
-      generateProductItem({ productId: 1 }), // Omelet ham/mushrooms
-
-      generateProductItem({ productId: 2 }), // Omelet pepperoni
-
-      // Breakfast Latte variants
-      { productId: 3, price: 2.50, size: 300 },
-      { productId: 3, price: 3.20, size: 400 },
-      { productId: 3, price: 3.80, size: 500 },
-
-      generateProductItem({ productId: 4 }), // Denwich
-
-      // Chicken nuggets variants (6, 9, 12 pcs)
-      { productId: 5, price: 3.50, size: 6 },
-      { productId: 5, price: 4.80, size: 9 },
-      { productId: 5, price: 5.90, size: 12 },
-
-      generateProductItem({ productId: 6 }), // Potatoes
-      generateProductItem({ productId: 7 }), // Dodster
-      generateProductItem({ productId: 8 }), // Spicy Dodster
-
-      // Milkshake variants (300, 500 ml)
-      { productId: 9, price: 2.90, size: 300 },
-      { productId: 9, price: 3.90, size: 500 },
-      { productId: 10, price: 2.90, size: 300 },
-      { productId: 10, price: 3.90, size: 500 },
-      { productId: 11, price: 3.20, size: 300 },
-      { productId: 11, price: 4.20, size: 500 },
-      { productId: 12, price: 2.70, size: 300 },
-      { productId: 12, price: 3.70, size: 500 },
-
-      // Hot drinks variants (300, 400, 500 ml)
-      { productId: 13, price: 2.80, size: 300 },
-      { productId: 13, price: 3.50, size: 400 },
-      { productId: 13, price: 4.10, size: 500 },
-
-      { productId: 14, price: 2.80, size: 300 },
-      { productId: 14, price: 3.50, size: 400 },
-      { productId: 14, price: 4.10, size: 500 },
-
-      { productId: 15, price: 2.90, size: 300 },
-      { productId: 15, price: 3.60, size: 400 },
-      { productId: 15, price: 4.20, size: 500 },
-
-      { productId: 16, price: 1.90, size: 300 },
-      { productId: 16, price: 2.50, size: 400 },
-
-      { productId: 17, price: 2.50, size: 300 },
-      { productId: 17, price: 3.20, size: 400 },
-      { productId: 17, price: 3.80, size: 500 },
-    ],
-  });
-
-  await prisma.productItem.createMany({
-    data: [],
+    data: productItems,
   });
 
   await prisma.cart.createMany({

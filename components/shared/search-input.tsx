@@ -147,8 +147,8 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
               'absolute w-full rounded-xl py-2 top-14 shadow-md z-30',
               isDarkPurple ? 'bg-secondary' : 'bg-white',
               isFirstFocus ? 'animate-popup-in' : 'transition-all duration-300 ease-in-out',
-              products.length > 0
-                ? 'opacity-100 translate-y-0'
+              (searchQuery || products.length > 0)
+                ? 'opacity-100 translate-y-0 pointer-events-auto'
                 : 'opacity-0 -translate-y-2 pointer-events-none',
               isLoading ? 'animate-pulse' : '',
             )}

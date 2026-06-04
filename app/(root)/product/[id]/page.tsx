@@ -2,7 +2,15 @@ import { Container, ProductForm } from '@/components/shared';
 import { prisma } from '@/prisma/prisma-client';
 import { notFound } from 'next/navigation';
 
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect('/?auth=login');
+  }
   const { id } = await params;
   const product = await prisma.product.findFirst({
     where: { id: Number(id) },

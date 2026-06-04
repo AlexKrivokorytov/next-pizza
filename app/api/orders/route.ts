@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
+import { stripe } from '@/lib/stripe';
 
 const checkoutSchema = z.object({
   fullName: z.string().min(2, 'Name must be at least 2 characters'),
@@ -53,8 +54,38 @@ export async function POST(req: NextRequest) {
     // Note: In a real app, we'd clear the database cart here and send an email or payment link.
     // Since our cart is local-storage based Zustand, the client handles clearing its own cart.
     
+    // Create Stripe Checkout Session
+    const stripeSession = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/?cancelled=true`,
+      customer_email: data.email,
+      client_reference_id: order.id.toString(),
+      metadata: {
+        orderId: order.id.toString(),
+      },
+      line_items: data.items.map((item: any) => ({
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: item.name || 'Pizza Item',
+            images: item.imageUrl ? [item.imageUrl] : [],
+          },
+          unit_amount: Math.round(item.price * 100),
+        },
+        quantity: item.quantity,
+      })),
+    });
+
+    // Update order with payment ID
+    await prisma.order.update({
+      where: { id: order.id },
+      data: { paymentId: stripeSession.id },
+    });
+
     return NextResponse.json(
-      { orderId: order.id, status: order.status, message: 'Order created successfully' }, 
+      { orderId: order.id, status: order.status, checkoutUrl: stripeSession.url, message: 'Order created successfully' }, 
       { status: 201 }
     );
   } catch (error) {

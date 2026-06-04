@@ -90,7 +90,7 @@ export const CheckboxFiltersGroup: React.FC<CheckboxFiltersGroupProps> = ({
         </div>
       )}
 
-      <div className="flex flex-col gap-4">
+      <div className={`flex flex-col gap-4 ${showAll ? 'max-h-[260px] overflow-y-auto pr-1 scrollbar' : ''}`}>
         {list.map((item, index) => (
           <FilterCheckbox
             key={index}

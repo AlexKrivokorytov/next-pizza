@@ -23,6 +23,10 @@ interface CartState {
   clearCart: () => void;
 }
 
+const calcTotalAmount = (items: CartItem[]) => 
+  Math.round(items.reduce((acc, item) => acc + item.price * item.quantity, 0) * 100) / 100;
+const calcTotalItems = (items: CartItem[]) => items.reduce((acc, item) => acc + item.quantity, 0);
+
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
@@ -43,18 +47,20 @@ export const useCartStore = create<CartState>()(
         });
 
         if (existingItem) {
+          const newItems = items.map((i) =>
+            i.id === existingItem.id ? { ...i, quantity: i.quantity + item.quantity } : i,
+          );
           set({
-            items: items.map((i) =>
-              i.id === existingItem.id ? { ...i, quantity: i.quantity + item.quantity } : i,
-            ),
-            totalItems: get().totalItems + item.quantity,
-            totalAmount: get().totalAmount + item.price * item.quantity,
+            items: newItems,
+            totalItems: calcTotalItems(newItems),
+            totalAmount: calcTotalAmount(newItems),
           });
         } else {
+          const newItems = [...items, item];
           set({
-            items: [...items, item],
-            totalItems: get().totalItems + item.quantity,
-            totalAmount: get().totalAmount + item.price * item.quantity,
+            items: newItems,
+            totalItems: calcTotalItems(newItems),
+            totalAmount: calcTotalAmount(newItems),
           });
         }
       },
@@ -64,10 +70,11 @@ export const useCartStore = create<CartState>()(
         const itemToRemove = items.find((i) => i.id === id);
 
         if (itemToRemove) {
+          const newItems = items.filter((i) => i.id !== id);
           set({
-            items: items.filter((i) => i.id !== id),
-            totalItems: get().totalItems - itemToRemove.quantity,
-            totalAmount: get().totalAmount - itemToRemove.price * itemToRemove.quantity,
+            items: newItems,
+            totalItems: calcTotalItems(newItems),
+            totalAmount: calcTotalAmount(newItems),
           });
         }
       },
@@ -77,12 +84,11 @@ export const useCartStore = create<CartState>()(
         const item = items.find((i) => i.id === id);
 
         if (item) {
-          const quantityDiff = quantity - item.quantity;
-
+          const newItems = items.map((i) => (i.id === id ? { ...i, quantity } : i));
           set({
-            items: items.map((i) => (i.id === id ? { ...i, quantity } : i)),
-            totalItems: get().totalItems + quantityDiff,
-            totalAmount: get().totalAmount + item.price * quantityDiff,
+            items: newItems,
+            totalItems: calcTotalItems(newItems),
+            totalAmount: calcTotalAmount(newItems),
           });
         }
       },
@@ -97,6 +103,13 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: 'cart-storage',
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          // Recalculate totals on load to wipe away any old floating-point bugs stored in cache
+          state.totalAmount = calcTotalAmount(state.items);
+          state.totalItems = calcTotalItems(state.items);
+        }
+      },
     },
   ),
 );

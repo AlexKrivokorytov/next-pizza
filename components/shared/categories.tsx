@@ -34,7 +34,7 @@ export const Categories: React.FC<CategoryProps> = ({ items, className }) => {
       )}
     >
       {items.map(({ id, name }, index) => (
-        <a
+        <button
           className={cn(
             'flex items-center font-bold h-11 rounded-2xl px-5 transition-colors',
             categoryActiveId === id
@@ -49,11 +49,19 @@ export const Categories: React.FC<CategoryProps> = ({ items, className }) => {
                   isDarkPurple ? 'hover:bg-secondary/80' : 'hover:bg-gray-100',
                 ),
           )}
-          href={`/#${name}`}
+          onClick={(e) => {
+            e.preventDefault();
+            // Force replace the hash in URL without jumping
+            window.history.replaceState(null, '', `/#${name}`);
+            const element = document.getElementById(name);
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
           key={index}
         >
-          <button>{name}</button>
-        </a>
+          {name}
+        </button>
       ))}
     </nav>
   );

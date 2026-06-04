@@ -25,6 +25,8 @@ declare module 'next-auth/jwt' {
   }
 }
 
+import { rateLimit } from '@/lib/rate-limit';
+
 export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
@@ -36,6 +38,12 @@ export const authOptions: AuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null;
+        }
+
+        // Rate limit by email to prevent brute-force attacks
+        const isAllowed = await rateLimit(`rate_limit:login:${credentials.email}`, 5, 15 * 60); // 5 attempts per 15 minutes
+        if (!isAllowed) {
+          throw new Error('Too many login attempts. Please try again later.');
         }
 
         const user = await UsersService.findByEmail(credentials.email);
@@ -61,17 +69,29 @@ export const authOptions: AuthOptions = {
   ],
   session: {
     strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+      } else if (token.id) {
+        // Validate user against DB on each token refresh
+        const dbUser = await UsersService.findById(Number(token.id));
+        if (!dbUser) {
+          // If user deleted, invalidate token
+          token.id = '';
+        } else {
+          // Keep role updated
+          token.role = dbUser.role;
+        }
       }
       return token;
     },
     async session({ session, token }) {
-      if (session.user) {
+      if (session.user && token.id) {
         session.user.id = token.id;
         session.user.role = token.role;
       }

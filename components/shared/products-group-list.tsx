@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useIntersection } from 'react-use';
-import { motion, Variants } from 'framer-motion';
 import { ShoppingBag } from 'lucide-react';
 import { Title } from './title';
 import { cn } from '../../lib/utils';
@@ -51,28 +50,7 @@ export const ProductsGroupList: React.FC<ProductsGroupListProps> = ({
     }
   }, [intersection?.isIntersecting, setActiveCategoryId, categoryId]);
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
 
-  const itemVariants: Variants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 100,
-        damping: 12,
-      },
-    },
-  };
 
   return (
     <div className={cn('scroll-mt-20', className)} id={title} ref={intersectionRef}>
@@ -95,15 +73,9 @@ export const ProductsGroupList: React.FC<ProductsGroupListProps> = ({
           </p>
         </div>
       ) : (
-        <motion.div
-          className={cn('grid gap-6', 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3', listClassName)}
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-        >
+        <div className={cn('grid gap-6', 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3', listClassName)}>
           {items.map((product) => (
-            <motion.div key={product.id} variants={itemVariants}>
+            <div key={product.id} className="transition-opacity duration-300">
               <ProductCard
                 name={product.name}
                 imageUrl={product.imageUrl}
@@ -111,10 +83,11 @@ export const ProductsGroupList: React.FC<ProductsGroupListProps> = ({
                 id={product.id}
                 productItemId={product.items[0].id}
                 ingredients={product.ingredients}
+                description={product.description}
               />
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       )}
     </div>
   );

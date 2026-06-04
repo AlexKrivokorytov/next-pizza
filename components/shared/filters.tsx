@@ -25,8 +25,8 @@ const CategoryVariantsFilter = ({ activeCategoryId, filters }: { activeCategoryI
           onClickCheckbox={filters.setPizzaTypes}
           selected={filters.pizzaTypes}
           items={[
-            { text: 'Thin', value: '1' },
-            { text: 'Traditional', value: '2' },
+            { text: 'Traditional', value: '1' },
+            { text: 'Thin', value: '2' },
           ]}
         />
         <CheckboxFiltersGroup
